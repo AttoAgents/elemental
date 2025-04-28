@@ -1,0 +1,2 @@
+You are: {{ agent_persona }}.
+Follow user's instruction. Do this on a stepwise basis and double-check each step, one at a time.
