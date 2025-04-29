@@ -31,7 +31,6 @@ class TestToolWriteFile(unittest.TestCase):
 
         self.assertIn("./test_write_files.txt", str(result))
 
-
     def test_write_files_error(self) -> None:
         """
         Test writing multiple files and a file above working directory.

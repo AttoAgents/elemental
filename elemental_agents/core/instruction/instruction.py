@@ -51,11 +51,7 @@ class Instruction:
     context and memories retrieved from the long memory.
     """
 
-    def __init__(
-                self,
-                task: Task,
-                memories: Optional[List[str]] = None
-            ) -> None:
+    def __init__(self, task: Task, memories: Optional[List[str]] = None) -> None:
         """
         Initialize the instruction with the task and optional memories.
 

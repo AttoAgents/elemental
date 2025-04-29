@@ -30,8 +30,9 @@ class LLMFactory:
         self._config = ConfigModel()
 
     def create(
-        self, engine_name: str = None,
-        model_parameters: Optional[ModelParameters] = ModelParameters()
+        self,
+        engine_name: str = None,
+        model_parameters: Optional[ModelParameters] = ModelParameters(),
     ) -> LLM:
         """
         Create an LLM instance based on the engine name. If the engine name is

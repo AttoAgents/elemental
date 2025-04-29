@@ -25,7 +25,7 @@ class TestSimpleAgent(unittest.TestCase):
 
         context = AgentContext(
             agent_name="AssistantAgent",
-            agent_persona="Helpful and informative assistant."
+            agent_persona="Helpful and informative assistant.",
         )
 
         agent = SimpleAgentLogic(llm, context)
@@ -48,7 +48,7 @@ class TestSimpleAgent(unittest.TestCase):
 
         context = AgentContext(
             agent_name="AssistantAgent",
-            agent_persona="Helpful and informative assistant."
+            agent_persona="Helpful and informative assistant.",
         )
 
         agent = SimpleAgentLogic(llm, context)
@@ -71,7 +71,7 @@ class TestSimpleAgent(unittest.TestCase):
 
         context = AgentContext(
             agent_name="AssistantAgent",
-            agent_persona="Helpful and informative assistant."
+            agent_persona="Helpful and informative assistant.",
         )
 
         agent = SimpleAgentLogic(llm, context)

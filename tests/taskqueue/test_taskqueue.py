@@ -25,7 +25,7 @@ class TestTaskQueue(unittest.TestCase):
 
         original_instruction = "Test instruction"
 
-        tasks: List[Dict[str,Any]] = [
+        tasks: List[Dict[str, Any]] = [
             {
                 "id": "1",
                 "description": "Task 1",
@@ -64,7 +64,7 @@ class TestTaskQueue(unittest.TestCase):
 
         original_instruction = "Test instruction"
 
-        tasks: List[Dict[str,Any]] = [
+        tasks: List[Dict[str, Any]] = [
             {
                 "id": "1",
                 "description": "Task 1",
@@ -139,7 +139,6 @@ class TestTaskQueue(unittest.TestCase):
 
         (next_task, queue_status) = task_queue.get_next_ready_tasks()
         self.assertEqual(next_task, None)
-
 
     def test_planner_generated_plan(self) -> None:
         """

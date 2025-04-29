@@ -8,6 +8,8 @@ from loguru import logger
 
 from elemental_agents.core.agent.agent import Agent
 from elemental_agents.core.agent.generic_agent import GenericAgent
+from elemental_agents.core.agent.simple_agent import SimpleAgent
+from elemental_agents.core.agent_logic.agent_logic import AgentLogic
 from elemental_agents.core.agent_logic.agent_model import AgentContext
 from elemental_agents.core.agent_logic.planner_agent import PlannerAgentLogic
 from elemental_agents.core.agent_logic.simple_agent import SimpleAgentLogic
@@ -31,10 +33,10 @@ class AgentFactory:
         agent_name: str = None,
         agent_type: str = None,
         llm_model: str = None,
+        agent_persona: str = None,
         memory_capacity: Optional[int] = None,
         tools: Optional[List[str]] = None,
-        termination: Optional[str] = None,
-        agent_persona: Optional[str] = None,
+        termination: Optional[str] = "",
         template: Optional[str] = None,
     ) -> Agent:
         """
@@ -66,43 +68,61 @@ class AgentFactory:
         )
 
         # Toolbox
+        toolbox: ToolBox = None
         if tools is not None and len(tools) > 0:
             toolbox = ToolBox()
             for tool in tools:
                 toolbox.register_tool_by_name(tool)
 
-        agent_logic: SimpleAgentLogic | PlannerAgentLogic | VerifierAgentLogic = None
+        agent_logic: AgentLogic = None
+        agent: Agent = None
 
-        if local_agent_type == "simple":
-            agent_logic = SimpleAgentLogic(
-                model=llm, context=agent_context, template=template
-            )
+        match local_agent_type:
+            case "simple":
+                agent_logic = SimpleAgentLogic(
+                    model=llm, context=agent_context, template=template
+                )
+                agent = SimpleAgent(
+                    agent=agent_logic, short_memory_capacity=short_memory_capacity
+                )
+                return agent
 
-        if local_agent_type == "planner":
-            agent_logic = PlannerAgentLogic(
-                model=llm, context=agent_context, template=template
-            )
+            case "planner":
+                agent_logic = PlannerAgentLogic(
+                    model=llm, context=agent_context, template=template
+                )
+                agent = SimpleAgent(
+                    agent=agent_logic, short_memory_capacity=short_memory_capacity
+                )
+                return agent
 
-        if local_agent_type == "verifier":
-            agent_logic = VerifierAgentLogic(
-                model=llm, context=agent_context, template=template
-            )
+            case "verifier":
+                agent_logic = VerifierAgentLogic(
+                    model=llm, context=agent_context, template=template
+                )
+                agent = SimpleAgent(
+                    agent=agent_logic, short_memory_capacity=short_memory_capacity
+                )
+                return agent
 
-        if agent_logic is None:
-            logger.error(
-                f"Agent type {local_agent_type} is not supported. "
-                f"Supported agent types are: simple, planner, verifier."
-            )
-            raise AgentTypeException(
-                f"Agent type {local_agent_type} is not supported. "
-                f"Supported agent types are: simple, planner, verifier."
-            )
+            case "ReAct":
+                agent_logic = SimpleAgentLogic(
+                    model=llm, context=agent_context, template=template
+                )
+                agent = GenericAgent(
+                    agent_logic=agent_logic,
+                    short_memory_capacity=short_memory_capacity,
+                    toolbox=toolbox,
+                    termination_sequence=termination,
+                )
+                return agent
 
-        agent = GenericAgent(
-            agent_logic=agent_logic,
-            short_memory_capacity=short_memory_capacity,
-            toolbox=toolbox,
-            termination_sequence=termination,
-        )
-
-        return agent
+            case _:
+                logger.error(
+                    f"Agent type {local_agent_type} is not supported. "
+                    f"Supported agent types are: simple, planner, verifier."
+                )
+                raise AgentTypeException(
+                    f"Agent type {local_agent_type} is not supported. "
+                    f"Supported agent types are: simple, planner, verifier."
+                )

@@ -1,5 +1,28 @@
+"""
+# Example of using the Simple Assistant Agent
+This example demonstrates how to create a simple assistant agent using the Elemental Agents library.
+It shows how to create an agent, select language model run the task.
+"""
+
+from loguru import logger
+
 from elemental_agents.core.agent.agent_factory import AgentFactory
 
-factory = AgentFactory()
-assistant = factory.create("AssistantAgent", "Simple", "ollama|gemma3")
-result = assistant.run("Why is the sky blue?")
+if __name__ == "__main__":
+
+    # Example usage
+    # Create an agent with "Simple" type and run a task
+
+    TASK = "Why is the sky blue?"
+    SESSION = "TestSession"
+
+    factory = AgentFactory()
+    assistant = factory.create(
+        agent_name="AssistantAgent",
+        agent_persona="Simple always helpful assistant",
+        agent_type="simple",
+        llm_model="ollama|gemma3",
+    )
+
+    result = assistant.run(task=TASK, input_session=SESSION)
+    logger.info(f"Result: {result}")

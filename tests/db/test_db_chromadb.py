@@ -19,9 +19,7 @@ class TestDBChromaDB(unittest.TestCase):
         Test creating in memory database.
         """
         collection_name = "test_collection"
-        db = DBChromaDB(
-            scope="in_memory",
-            file_name=None)
+        db = DBChromaDB(scope="in_memory", file_name=None)
 
         self.assertIsNotNone(db)
 
