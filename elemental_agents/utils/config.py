@@ -20,72 +20,64 @@ ATTO_ENV_FILE = os.getenv("ATTO_ENV_FILE", ".env")
 
 class ConfigModel(BaseSettings):
     """
-    Configuration settings for the AttoAgents application.
+    Configuration settings.
     """
 
     model_config = SettingsConfigDict(env_file=ATTO_ENV_FILE, env_file_encoding="utf-8")
-
-    db_username: str = ""
-    db_password: str = ""
-    db_host: str = ""
-    db_port: int = 5432
-    db_database: str = ""
 
     default_db_type: str = "chromadb"
     default_db_connection_string: str = "chroma.db"
 
     # LLM
-    ollama_llm_model_name: str = "llama3.1:8b-instruct-q4_0"
-    ollama_embedding_model_name: str = "nomic-embed-text"
-    ollama_vector_size: int = 768
-    ollama_temperature: float = 0.1
-    ollama_max_tokens: int = 1000
+    ollama_llm_model_name: str = ""
+    ollama_embedding_model_name: str = ""
+    ollama_vector_size: int = 0
+    ollama_temperature: float = 0.0
+    ollama_max_tokens: int = 0
     ollama_stop_words: List[str] = []
     ollama_streaming: bool = False
     ollama_url: str = "http://localhost:11434"
 
-    openai_api_key: str = ""
-    openai_llm_model_name: str = "gpt-4o-mini"
-    openai_embedding_model_name: str = "text-embedding-3-small"
-    openai_vector_size: int = 1536
+    openai_api_key: str = "Not set"
+    openai_llm_model_name: str = ""
+    openai_embedding_model_name: str = ""
+    openai_vector_size: int = 0
     openai_temperature: float = 0.0
-    openai_max_tokens: int = 1000
+    openai_max_tokens: int = 0
     openai_stop_words: List[str] = []
-    openai_streaming: bool = True
+    openai_streaming: bool = False
     openai_url: str = "https://api.openai.com/v1"
 
-    custom_api_key: str = ""
-    custom_llm_model_name: str = "gpt-4o-mini"
-    custom_embedding_model_name: str = "text-embedding-3-small"
-    custom_vector_size: int = 1536
+    custom_api_key: str = "Not set"
+    custom_llm_model_name: str = ""
+    custom_embedding_model_name: str = ""
+    custom_vector_size: int = 0
     custom_temperature: float = 0.0
-    custom_max_tokens: int = 1000
+    custom_max_tokens: int = 0
     custom_stop_words: List[str] = []
-    custom_streaming: bool = True
-    custom_url: str = "https://api.openai.com/v1"
+    custom_streaming: bool = False
+    custom_url: str = ""
 
-    anthropic_api_key: str = ""
-    anthropic_llm_model_name: str = "claude-3-5-sonnet-20241022"
+    anthropic_api_key: str = "Not set"
+    anthropic_llm_model_name: str = ""
     anthropic_temperature: float = 0.0
-    anthropic_max_tokens: int = 1000
+    anthropic_max_tokens: int = 0
     anthropic_stop_words: List[str] = []
-    anthropic_streaming: bool = True
+    anthropic_streaming: bool = False
 
-    llama_llm_model_name: str = "models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
-    llama_cpp_embedding_model_name: str = (
-        "models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
-    )
-    llama_cpp_vector_size: int = 4096
+    llama_llm_model_name: str = ""
+    llama_cpp_embedding_model_name: str = ""
+    llama_cpp_vector_size: int = 0
     llama_cpp_temperature: float = 0.0
-    llama_cpp_max_tokens: int = 1000
+    llama_cpp_max_tokens: int = 0
     llama_cpp_stop_words: List[str] = []
     llama_cpp_streaming: bool = False
     llama_cpp_model_directory: str = "models"
 
-    default_engine: str = "ollama"
-    default_model_name: str = ollama_llm_model_name
-    default_vector_size: int = ollama_vector_size
-    default_embedding_model_name: str = ollama_embedding_model_name
+    default_engine: str = ""
+    default_model_name: str = ""
+    default_vector_size: int = 0
+    default_embedding_model_name: str = ""
 
     # Observer
     observer_destination: Literal["screen", "file", "db", "webhook", "none"] = "screen"
@@ -95,7 +87,7 @@ class ConfigModel(BaseSettings):
     observer_webhook_url: str = ""
 
     # Streaming
-    websocket_url: str = "http://127.0.0.1:10904"
+    websocket_url: str = ""
 
     # Agent
     max_agent_iterations: int = 15
@@ -105,8 +97,8 @@ class ConfigModel(BaseSettings):
     agent_default_type: str = "ReAct"
 
     # Tools
-    google_search_api_key: str = ""
-    google_cse_id: str = ""
+    google_search_api_key: str = "Not set"
+    google_cse_id: str = "Not set"
     google_search_timeout: int = 5
 
     wikipedia_user_agent: str = "ExampleAgent/1.0 (info@example.com)"
@@ -117,7 +109,7 @@ class ConfigModel(BaseSettings):
     long_memory_items: int = 5
     long_memory_threshold: float = 0.25
     long_memory_db_string: str = "chromadb|chroma.db"
-    long_memory_embeddings_engine: str = "ollama|nomic-embed-text"
+    long_memory_embeddings_engine: str = ""
 
     short_memory_items: int = -1
 
