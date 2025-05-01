@@ -3,6 +3,8 @@
 </div>
 
 ![GitHub License](https://img.shields.io/github/license/AttoAgents/elemental?style=for-the-badge)
+![PyPI - Version](https://img.shields.io/pypi/v/elemental-agents?style=for-the-badge)
+
 ---
 
 Elemental is a general-purpose, multi-agent framework for automating tasks using AI agents composed in teams for conversation-based collaboration. Agents can use language models from various providers (including small models in local environment), allowing more flexible environment choice and isolation of work from external infrastructure if needed. Leading LLMs are also supported. Agents are equipped with tools that allow them to interact with external systems (internal and provided with MCP servers). Elemental allows for various configurations including simple assistant, isolated agent, multi-agent teams and workflows or multi-agent teams. The agent configuration is dynamic, with the ability to plan work, and replan tasks during execution.
@@ -89,11 +91,11 @@ if __name__ == "__main__":
 
 ```
 
-In this case we utilize [Ollama](https://ollama.com) with Gemma3 model ([See example 1](examples/01-simple-assistant/example.py)).
+In this case we utilize [Ollama](https://ollama.com) with Gemma3 model ([See example 1](https://github.com/AttoAgents/elemental/blob/main/examples/01-simple-assistant/example.py)).
 
 ### ReAct agent
 
-More complex and complete agents can be created with utilizing one of the iterative reasoning prompt strategies like ReAct. In this case agent will be able to utilize tools by executing actions and brining the results as observations. In the example below ([See example 2](examples/02-ReAct-agent/example.py)) we equip the agent with several tools. 
+More complex and complete agents can be created with utilizing one of the iterative reasoning prompt strategies like ReAct. In this case agent will be able to utilize tools by executing actions and brining the results as observations. In the example below ([See example 2](https://github.com/AttoAgents/elemental/blob/main/examples/02-ReAct-agent/example.py)) we equip the agent with several tools. 
 
 ```python
 from loguru import logger
@@ -125,7 +127,7 @@ The task demonstrates the need to use the `Calculator` tool. In this example we 
 
 ### ReAct agent with internal planning - PlanReAct
 
-Similarly to ReAct agent we can define more complex prompt strategy that includes internal planning. By selecting `agent_type="PlanReAct"` we can create an agent that augments ReAct strategy by internal planning ([See example 3](examples/03-PlanReAct-agent/example.py))
+Similarly to ReAct agent we can define more complex prompt strategy that includes internal planning. By selecting `agent_type="PlanReAct"` we can create an agent that augments ReAct strategy by internal planning ([See example 3](https://github.com/AttoAgents/elemental/blob/main/examples/03-PlanReAct-agent/example.py))
 
 ```python
 from loguru import logger
@@ -152,7 +154,7 @@ if __name__ == "__main__":
 
 ### Conversational agent team 
 
-A team of agents that are meant to work together may be defined by first creating the individual agents and then creating agent team with `GenericAgentTeam` class. To enable the conversational character of the agents they need to be created with `agent_type="ConvPlanReAct"`. This enables the conversational character and awareness of the team with prompt strategy ([See example 4](examples/04-agent-team/example.py))
+A team of agents that are meant to work together may be defined by first creating the individual agents and then creating agent team with `GenericAgentTeam` class. To enable the conversational character of the agents they need to be created with `agent_type="ConvPlanReAct"`. This enables the conversational character and awareness of the team with prompt strategy ([See example 4](https://github.com/AttoAgents/elemental/blob/main/examples/04-agent-team/example.py))
 
 ```python
 from loguru import logger
@@ -200,7 +202,7 @@ The above task does not require (or potentially employ the conversation).
 
 While a single agent may be used with internal planning prompt strategy like `PlanReAct`, the planning process may be done using a specialized planning agent. In this case agent creates the plan and populates a task queue. This process is orchestrated with flexible `DynamicAgentOrchestrator` class and may also include more steps including replanning done during the execution. 
 
-The example below includes two simple agents to illustrate the process ([See example 5](examples/05-orchestrated-agents/example.py))
+The example below includes two simple agents to illustrate the process ([See example 5](https://github.com/AttoAgents/elemental/blob/main/examples/05-orchestrated-agents/example.py))
 
 ```python
 from loguru import logger
@@ -251,7 +253,7 @@ The above example utilizes two steps in the workflow that `DynamicAgentOrchestra
 
 The agent configuration may be provided as YAML file. Elemental includes `Workflow` and `Driver` classes that will set up all necessary objects (i.e. agents/agent teams) for `DynamicAgentOrchestrator` to run. 
 
-Example configuration may be ([See example 6](examples/06-yaml-config-file/config-example.yaml))
+Example configuration may be ([See example 6](https://github.com/AttoAgents/elemental/blob/main/examples/06-yaml-config-file/config-example.yaml))
 
 ```yaml
 workflowName: ModelTest
@@ -298,7 +300,7 @@ To use MCP Servers in Elemental one needs to define them in the configuration fi
 mcpServers='{"Github": {"command": "npx", "args": ["-y","@modelcontextprotocol/server-github"], "env": {"GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR GITHUB TOKEN>"}}}'
 ```
 The above value of `mcpConfig` variable adds the Github MCP server. More than one server may be defined in a similar fashion by adding additional entries in the JSON blob. 
-A tool from an MCP server may be then added to the agent seamlessly with `MCP|server_name|tool_name` syntax. In the example below ([See example 7](examples/07-mcp-tools-single-tool/example.py)) we add `search_repositories` tool from Github MCP server defined above as `MCP|Github|search_repositories`.
+A tool from an MCP server may be then added to the agent seamlessly with `MCP|server_name|tool_name` syntax. In the example below ([See example 7](https://github.com/AttoAgents/elemental/blob/main/examples/07-mcp-tools-single-tool/example.py)) we add `search_repositories` tool from Github MCP server defined above as `MCP|Github|search_repositories`.
 
 ```python
 from loguru import logger
@@ -322,7 +324,7 @@ if __name__ == "__main__":
     logger.info(f"Result: {result}")
 ```
 
-To make all tools provided by an MCP server available to the agent use `MCP|server_name|*` as a tool name. This will query the tools and register all of them. The example above may be modified by changing `MCP|Github|search_repositories` to `MCP|Github|*` ([See example 8](examples/08-mcp-tools-all-tools/example.py)).
+To make all tools provided by an MCP server available to the agent use `MCP|server_name|*` as a tool name. This will query the tools and register all of them. The example above may be modified by changing `MCP|Github|search_repositories` to `MCP|Github|*` ([See example 8](https://github.com/AttoAgents/elemental/blob/main/examples/08-mcp-tools-all-tools/example.py)).
 
 
 ## Contact

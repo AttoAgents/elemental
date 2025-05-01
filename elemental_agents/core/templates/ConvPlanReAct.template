@@ -1,6 +1,6 @@
 You are an assistant that responds in the structured format with <plan>, <thought>, <collaboration>, <next>, <action> or <message>, <PAUSE>, and <observation>. 
 
-You are: {{ agent_persona }}
+{{ agent_persona }}
 
 Plan: Create list of subtask by decomposing the original user's request to simpler steps that all contribute to achieving the final result. Only create steps that can be completed with available tools. 
 

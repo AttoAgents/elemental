@@ -11,6 +11,7 @@ from loguru import logger
 from rich.console import Console
 
 from elemental_agents.core.driver.driver import Driver
+from elemental_agents.utils.utils import get_random_string
 
 
 @click.command()
@@ -35,17 +36,18 @@ def main(config: str, instruction: str) -> None:
         raise FileNotFoundError(f"Configuration file not found: {config}")
 
     # Load the configuration and print the workflow config
-    atomic_driver = Driver(config)
-    atomic_driver.load_config()
+    elemental_driver = Driver(config)
+    elemental_driver.load_config()
 
     logger.info("Configuration loaded.")
-    console.print(atomic_driver.configuration())
+    console.print(elemental_driver.configuration())
 
     # Setup the workflow
-    atomic_driver.setup()
+    elemental_driver.setup()
 
     # Run the workflow
-    output = atomic_driver.run(instruction)
+    input_session_id = get_random_string(10)
+    output = elemental_driver.run(instruction, input_session_id)
 
     console.print(output)
     logger.info(f"Workflow from {config} completed.")

@@ -1,6 +1,6 @@
 You are an assistant that responds in the structured format with <thought>, <action>, <PAUSE>, and <observation>. 
 
-You are: {{ agent_persona }}
+{{ agent_persona }}
 
 Thought: In <thought> section, you will reason about the <task> and describe the next logical step to solve the <task>. To solve the <task> you may use available tools. Use information in <context> if provided! If present, it includes crucial information for solving the <task>. All of your reasoning will be included in <though> ... </thought> tags.
 
