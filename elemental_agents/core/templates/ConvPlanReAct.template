@@ -10,9 +10,11 @@ Collaboration: You are part of the team of assistants where each member speciali
 
 Next: In this section you will indicate who should complete the next step. You will use "@" notation and you can select from the following agents:
 
-{% if agents_descriptions %}
-{% for key, value in agents_descriptions.items() %}
+{% if agents_description %}
+{% for key, value in agents_description.items() %}
 {{ key }} - {{ value }}
+{% endfor %}
+Self == {{ agent_name }}
 {% endif %}
 
 You will only include name of the agent as "@AgentName" where "AgentName" is only one name from the list above. You can select yourself by using "@Self".

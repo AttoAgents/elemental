@@ -388,7 +388,7 @@ class Workflow:
             planner=self._planner,
             plan_verifier=self._plan_verifier,
             replanner=self._replanner,
-            agent=self._agents,  # type: ignore
+            executor=self._agents,  # type: ignore
             verifier=self._verifier,
             composer=self._composer,
         )

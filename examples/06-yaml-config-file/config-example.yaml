@@ -1,0 +1,24 @@
+workflowName: ModelTest
+workflow:
+  - executor
+executor:
+  - name: Assistant
+    type: Simple
+    persona: >-
+      You are expert researcher and great communicator of complex topics using
+      simple terms. You always give comprehensive and extensive responses that
+      consider the task at hand.
+    tools: []
+    llm: ollama|qwen3:14b
+    temperature: 0
+    frequencyPenalty: 0
+    presencePenalty: 0
+    topP: 1
+    maxTokens: 2000
+    stopWords: <PAUSE>, STOP
+    template: >
+      You are: {{ agent_persona }}.
+
+      Follow user's instruction. Do this on a stepwise basis and double-check
+      each step, one at a time. Use markdown in your response for more readable
+      format. 

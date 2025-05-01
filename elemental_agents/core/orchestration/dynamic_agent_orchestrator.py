@@ -7,7 +7,7 @@ with the verifier.
 """
 
 import json
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from loguru import logger
 
@@ -36,12 +36,12 @@ class DynamicAgentOrchestrator(Orchestrator):
 
     def __init__(
         self,
-        planner: Agent | AgentTeam | None,
-        plan_verifier: Agent | AgentTeam | None,
-        replanner: Agent | AgentTeam | None,
-        agent: Agent | AgentTeam | None,
-        verifier: Agent | AgentTeam | None,
-        composer: Agent | AgentTeam | None,
+        planner: Optional[Agent | AgentTeam] = None,
+        plan_verifier: Optional[Agent | AgentTeam] = None,
+        replanner: Optional[Agent | AgentTeam] = None,
+        executor: Optional[Agent | AgentTeam] = None,
+        verifier: Optional[Agent | AgentTeam] = None,
+        composer: Optional[Agent | AgentTeam] = None,
     ) -> None:
         """
         Initialize the orchestrator with the planner, agent, and verifier executors.
@@ -56,7 +56,7 @@ class DynamicAgentOrchestrator(Orchestrator):
         self._planner = planner
         self._plan_verifier = plan_verifier
         self._replanner = replanner
-        self._agent = agent
+        self._executor = executor
         self._verifier = verifier
         self._composer = composer
 
@@ -147,7 +147,7 @@ class DynamicAgentOrchestrator(Orchestrator):
         # -------------------------------------------------------------------- #
         # Agent execution with task queue (restart mode starts here)
         # -------------------------------------------------------------------- #
-        if (self._agent is not None) and (self._planner is not None):
+        if (self._executor is not None) and (self._planner is not None):
 
             # Complete the tasks in the task queue
             while True:
@@ -169,7 +169,7 @@ class DynamicAgentOrchestrator(Orchestrator):
 
                 logger.info(f"Running the agent with task: {task}")
                 try:
-                    agent_response = self._agent.run(
+                    agent_response = self._executor.run(
                         agent_instruction.render(), input_session
                     )
 
@@ -244,7 +244,7 @@ class DynamicAgentOrchestrator(Orchestrator):
         if (
             (self._composer is not None)
             and (self._planner is not None)
-            and (self._agent is not None)
+            and (self._executor is not None)
         ):
 
             logger.info("Running the composer")
@@ -262,7 +262,7 @@ class DynamicAgentOrchestrator(Orchestrator):
         if (
             (self._verifier is not None)
             and (self._planner is not None)
-            and (self._agent is not None)
+            and (self._executor is not None)
         ):
 
             # Verify the final result (last response from the agent)
@@ -293,8 +293,8 @@ class DynamicAgentOrchestrator(Orchestrator):
         # -------------------------------------------------------------------- #
         # Direct agent execution (no use of task queue)
         # -------------------------------------------------------------------- #
-        logger.info("No planner defined, running the agent directly")
-        if (self._agent is not None) and (self._planner is None):
+        if (self._executor is not None) and (self._planner is None):
+            logger.info("No planner defined, running the agent directly")
 
             # Directly run instructions with the agent, no use of taskqueue
             logger.debug(f"Running the agent with task: {instruction}")
@@ -315,7 +315,7 @@ class DynamicAgentOrchestrator(Orchestrator):
                     instruction = current_instruction_with_memories
 
             try:
-                agent_response = self._agent.run(instruction, input_session)
+                agent_response = self._executor.run(instruction, input_session)
 
             except AgentException as e:
                 logger.error(f"Error running agent: {e}")
@@ -327,7 +327,7 @@ class DynamicAgentOrchestrator(Orchestrator):
             logger.debug(f"Agent response: {agent_response}")
         # -------------------------------------------------------------------- #
 
-        if self._agent is not None:
+        if self._executor is not None:
             return agent_response
         if self._planner is not None:
             return planner_response

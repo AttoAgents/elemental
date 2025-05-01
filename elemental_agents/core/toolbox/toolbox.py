@@ -93,7 +93,7 @@ class ToolBox:
         :return: Result of the tool execution
         """
 
-        if "MCP_" in tool_name:
+        if "MCP|" in tool_name:
             return self.call_mcp_tool(tool_name, parameters_json)
 
         try:
@@ -136,8 +136,8 @@ class ToolBox:
 
         try:
             # Get the MCP server
-            mcp_server_name = tool_name.split("_")[1]
-            mcp_tool_name = tool_name.split("_")[2]
+            mcp_server_name = tool_name.split("|")[1]
+            mcp_tool_name = tool_name.split("|")[2]
 
             mcp_server = self._mcp_client_registry.get(mcp_server_name)
             if mcp_server is None:
@@ -367,6 +367,41 @@ class ToolBox:
         else:
             logger.error(f"Tool {tool_name} not found.")
 
+    def register_mcp_server_with_all_tools(self, mcp_server_name: str) -> None:
+        """
+        Register all tools from the MCP server.
+
+        :param mcp_server_name: Name of the MCP server
+        """
+
+        logger.info(f"Registering all tools from MCP server: {mcp_server_name}")
+        try:
+            mcp_server = MCPClientToolbox(mcp_server_name)
+            self._mcp_client_registry[mcp_server_name] = mcp_server
+
+            # List all available tools at the server
+            coroutine = mcp_server.list_tools()
+            result = asyncio.run(coroutine)  # type: ignore
+            if result is None:
+                raise ValueError(
+                    f"Cannot register tools from MCP server: {mcp_server_name}"
+                )
+            for tool in result:
+                # Register the tool in the toolbox
+                registry_name = f"MCP|{mcp_server_name}|{tool.name}"
+                self._mcp_tool_registry[registry_name] = tool
+                logger.info(
+                    f"Registered MCP tool: {tool.name} from server: {mcp_server_name}"
+                )
+
+            logger.info(f"Registered all tools from MCP server: {mcp_server_name}")
+        except ValueError as e:
+            logger.error(f"Error registering MCP server: {e}")
+            logger.error(f"Cannot register tools from server {mcp_server_name}")
+        except Exception as e:
+            logger.error(f"Unexpected error: {e}")
+            logger.error(f"Cannot register tools from server {mcp_server_name}")
+
     def register_mcp_tool_by_name(self, tool_name: str) -> None:
         """
         Register an MCP tool by name from the MCP client.
@@ -376,6 +411,11 @@ class ToolBox:
 
         mcp_server_name = tool_name.split("|")[1]
         mcp_tool_name = tool_name.split("|")[2]
+
+        if mcp_tool_name == "*":
+            self.register_mcp_server_with_all_tools(mcp_server_name)
+            return
+
         logger.info(
             f"Trying to register MCP tool: {mcp_tool_name} "
             f"from server: {mcp_server_name} MCP server"
@@ -402,7 +442,7 @@ class ToolBox:
             self._mcp_client_registry[mcp_server_name].report_tools()
 
             # Register the tool in the toolbox
-            registry_name = f"MCP_{mcp_server_name}_{mcp_tool_name}"
+            registry_name = f"MCP|{mcp_server_name}|{mcp_tool_name}"
             self._mcp_tool_registry[registry_name] = result
 
             logger.info(
