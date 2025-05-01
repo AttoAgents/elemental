@@ -5,7 +5,7 @@
 ![GitHub License](https://img.shields.io/github/license/AttoAgents/elemental?style=for-the-badge)
 ---
 
-Elemental is a general-purpose, multi-agent framework for automating tasks using AI agents composed in teams for conversation-based collaboration. Agents can use language models from various providers (including small models in local environment), allowing more flexible environment choice and isolation of work from external infrastructure if needed. Leading LLMs are also supported. Agents are equipped with tools that allow them to interact with external systems (internal and provided with MCP servers). Elemental allows for various configurations including simple assistant, isolated agent, multi-agent teams and workflows or multi-agent teams. The agent configuration is dynamic, with the ability to planning work, replanning tasks.
+Elemental is a general-purpose, multi-agent framework for automating tasks using AI agents composed in teams for conversation-based collaboration. Agents can use language models from various providers (including small models in local environment), allowing more flexible environment choice and isolation of work from external infrastructure if needed. Leading LLMs are also supported. Agents are equipped with tools that allow them to interact with external systems (internal and provided with MCP servers). Elemental allows for various configurations including simple assistant, isolated agent, multi-agent teams and workflows or multi-agent teams. The agent configuration is dynamic, with the ability to plan work, and replan tasks during execution.
 
 ## Features
 
