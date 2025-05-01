@@ -1,5 +1,5 @@
 <div align="center"> 
-<img src="./doc/elemental-main-logo-light.png" width="256" alt="Atomic"> 
+<img src="https://attoagents.io/images/elemental-main-logo-light.png" width="256" alt="Elemental"> 
 </div>
 
 ![GitHub License](https://img.shields.io/github/license/AttoAgents/elemental?style=for-the-badge)
@@ -21,6 +21,14 @@ Elemental is a general-purpose, multi-agent framework for automating tasks using
 
 ## Getting started 
 
+## Install
+
+Install with:
+
+```
+pip install elemental-agents
+```
+
 ### Install from sources
 
 ```
@@ -32,7 +40,7 @@ pip install dist/elemental_agents-*.whl
 
 ### `.env` file
 
-Example of `.env` file for Elemental is 
+Example of `.env` file for Elemental projects is 
 
 ```sh
 openai_api_key="<OPENAI API KEY HERE>"

@@ -1,7 +1,7 @@
 [project]
 dynamic = [ "classifiers" ]
-name = "elemental_agents"
-description = "Multi-agent Framework for conversational collaborative AI agents' task automation."
+name = "elemental-agents"
+description = "Multi-agent Framework for conversational collaborative AI agents for task automation."
 version = "0.1.0"
 license = "MIT"
 license-files = ["LICENSE.md"]
