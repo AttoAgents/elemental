@@ -2,7 +2,7 @@
 Main driver to read a workflow configuration file and run the workflow.
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 import yaml
 
@@ -46,16 +46,29 @@ class Driver:
         """
         self._workflow = Workflow(self._config)
 
-    def run(self, input_instruction: str = None, input_session: str = None) -> str:
+    def run(
+        self, input_instruction: List[str] | str = None, input_session: str = None
+    ) -> str:
         """
         Run workflow with a given input.
 
-        :param input_instruction: The input to the workflow.
+        :param input_instruction(s): The input to the workflow.
         :return: The output of the workflow.
         """
 
-        observer.log_session(input_session, input_instruction)
-        observer.log_interaction(input_session, "user", input_instruction)
+        fist_instruction = (
+            input_instruction[0]
+            if isinstance(input_instruction, list)
+            else input_instruction
+        )
+        current_instruction = (
+            input_instruction[-1]
+            if isinstance(input_instruction, list)
+            else input_instruction
+        )
+
+        observer.log_session(input_session, fist_instruction)
+        observer.log_interaction(input_session, "user", current_instruction)
 
         output = self._workflow.run(input_instruction, input_session)
 
