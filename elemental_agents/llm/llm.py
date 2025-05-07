@@ -271,7 +271,10 @@ class LLM(ABC):
             self._sio = socketio.AsyncClient(reconnection=True, reconnection_attempts=5)
 
         sio_state = self._sio.eio.state if self._sio is not None else "N/A"
-        logger.info(("Connecting to WebSocket server... " f"Current state {sio_state}"))
+        logger.debug(
+                ("Connecting to WebSocket server... " 
+                f"Current state {sio_state}")
+            )
 
         # If already connected, no need to reconnect
         if self._sio is not None and self._sio.connected:
@@ -292,7 +295,7 @@ class LLM(ABC):
 
         for attempt in range(1, max_retries + 1):
             try:
-                logger.info(f"Connection attempt {attempt} to {self._stream_url}")
+                logger.debug(f"Connection attempt {attempt} to {self._stream_url}")
                 if self._sio is not None:
                     await self._sio.connect(self._stream_url, wait_timeout=5)
                     logger.info("Connected to WebSocket server")

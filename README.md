@@ -1,9 +1,11 @@
-<div align="center"> 
+<div align="center" style="margin-bottom: 1.5em;"> 
 <img src="https://attoagents.io/images/elemental-main-logo-light.png" width="256" alt="Elemental"> 
 </div>
 
 ![GitHub License](https://img.shields.io/github/license/AttoAgents/elemental?style=for-the-badge)
 ![PyPI - Version](https://img.shields.io/pypi/v/elemental-agents?style=for-the-badge)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/elemental-agents?style=for-the-badge&color=%231c4167)
+
 
 ---
 

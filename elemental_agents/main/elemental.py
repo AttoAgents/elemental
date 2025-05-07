@@ -167,8 +167,9 @@ def run_display(socket_url: str, complete_event: threading.Event) -> None:
                         accumulated_content += json_data["content"]
                     # Check for completion signal
                     if "full_response" in json_data:
-                        logger.debug("Received full_response signal")
-                        complete_event.set()
+                        logger.debug("Received full_response.")
+                        accumulated_content = ""
+                        # complete_event.set()
                 except json.JSONDecodeError:
                     # Not JSON, treat as plain text
                     accumulated_content += data
@@ -200,12 +201,12 @@ def run_display(socket_url: str, complete_event: threading.Event) -> None:
                 live.update(Markdown(accumulated_content))
                 time.sleep(0.1)
 
-            # If we received full_response, give a moment to display final content
-            if complete_event.is_set():
-                if accumulated_content != "":
+            # # If we received full_response, give a moment to display final content
+            # if complete_event.is_set():
+            #     if accumulated_content != "":
 
-                    live.update(Markdown(accumulated_content))
-                    time.sleep(0.5)  # Short delay to ensure final content is visible
+            #         live.update(Markdown(accumulated_content))
+            #         time.sleep(0.5)  # Short delay to ensure final content is visible
 
     except Exception as e:
         logger.error(f"Error in display: {str(e)}")

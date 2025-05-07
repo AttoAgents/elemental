@@ -44,6 +44,7 @@ class Agent(ABC):
 
         config = ConfigModel()
         self._max_iterations = config.max_agent_iterations
+        self._relaxed_react = config.relaxed_react
 
     def get_agent_name(self) -> str:
         """

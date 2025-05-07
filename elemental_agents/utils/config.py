@@ -92,6 +92,7 @@ class ConfigModel(BaseSettings):
     # Agent
     max_agent_iterations: int = 15
     max_multiagent_iterations: int = 20
+    relaxed_react: bool = False
 
     unit_default_selector: str = "identity"
     agent_default_type: str = "ReAct"

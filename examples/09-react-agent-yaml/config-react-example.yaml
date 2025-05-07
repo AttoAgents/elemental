@@ -1,0 +1,22 @@
+workflowName: ReAct Agent
+workflow:
+  - executor
+executor:
+  - name: Assistant
+    type: ReAct
+    persona: >-
+      You are expert researcher and great communicator of complex topics using
+      simple terms. You always give comprehensive and extensive responses that
+      consider the task at hand.
+    tools: 
+      - Calculator
+      - CurrentTime
+      - NoAction
+      - MCP|Github|search_repositories
+    llm: ollama|qwen3:4b
+    temperature: 0
+    frequencyPenalty: 0
+    presencePenalty: 0
+    topP: 1
+    maxTokens: 2000
+    stopWords: <PAUSE>, STOP

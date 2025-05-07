@@ -164,13 +164,37 @@ class GenericAgent(Agent):
             final_result = self.process_response(result)
             return (True, final_result)
 
-        # Run the agent's action portion
-        observation = self.run_instruction_action(result)
+        elif "<action>" in result:
 
-        # Update the instruction
-        iteration_result = f"<observation>\n{observation}\n</observation>"
+            # Run the agent's action portion
+            observation = self.run_instruction_action(result)
 
-        return (False, iteration_result)
+            # Update the instruction
+            iteration_result = f"<observation>\n{observation}\n</observation>"
+
+            return (False, iteration_result)
+
+        elif self._relaxed_react:
+            # Agent most likely did not follow the <action> or <result> tags
+            # in the response. We will flag this as <result> and return the
+            # result as is. Relaxed ReAct mode is enabled - Function calling 
+            # agent behavior.
+            logger.debug(
+                "Agent did not follow the <action> or <result> tags in the response."
+                "Returning the result as is due to relaxed_react mode."
+            )
+            final_result = result
+            return (True, final_result)
+        else:
+            # Agent most likely did not follow the <action> or <result> tags
+            # in the response. We will flag this as result and return the
+            # result as is with failure.
+            logger.error(
+                "Agent did not follow the <action> or <result> tags in the response."
+                "Returning the result as is."
+            )
+            final_result = result
+            return (False, final_result)
 
     def run_instruction_inference(
         self, instruction: str, original_instruction: str = "", input_session: str = ""
@@ -249,7 +273,10 @@ class GenericAgent(Agent):
 
         else:
             logger.error("No action found in the agent's response.")
-            observation = "No action found in the agent's response."
+            observation = (
+                    "No action found in the agent's response. "
+                    f"Specify <action> or repeat response in {self._termination_sequence} XML tags to give final result."
+                )
 
         return observation
 
