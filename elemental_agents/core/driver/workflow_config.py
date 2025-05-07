@@ -22,6 +22,7 @@ from elemental_agents.core.agent_logic.react_agent import ReActAgentLogic
 from elemental_agents.core.agent_logic.replanner_agent import ReplannerAgentLogic
 from elemental_agents.core.agent_logic.simple_agent import SimpleAgentLogic
 from elemental_agents.core.agent_logic.verifier_agent import VerifierAgentLogic
+from elemental_agents.core.agent_logic.composer_agent import ComposerAgentLogic
 from elemental_agents.core.agent_team.agent_team import AgentTeam
 from elemental_agents.core.agent_team.generic_agent_team import GenericAgentTeam
 from elemental_agents.core.orchestration.dynamic_agent_orchestrator import (
@@ -75,19 +76,19 @@ class Workflow:
         :return: The agent executor or unit executor based on the configuration.
         """
 
-        executor: Agent | AgentTeam | None = None
+        agent_composition: Agent | AgentTeam | None = None
 
         try:
             if len(self._config[stage_name]) > 1:
-                executor = self.setup_stage_unit_executor(stage_name)
+                agent_composition = self.setup_stage_agent_team(stage_name)
             else:
-                executor = self.setup_stage_agent_executor(stage_name)
+                agent_composition = self.setup_stage_agent(stage_name)
         except TypeError as e:
             logger.error(f"{stage_name} section is expected to be a list. {e}")
 
-        return executor
+        return agent_composition
 
-    def setup_stage_agent_executor(self, stage_name: str) -> Agent:
+    def setup_stage_agent(self, stage_name: str) -> Agent:
         """
         Setup the agent executor with the specified LLM, context, and toolbox.
 
@@ -196,17 +197,17 @@ class Workflow:
 
         return executor
 
-    def setup_stage_unit_executor(self, stage_name: str) -> AgentTeam:
+    def setup_stage_agent_team(self, stage_name: str) -> AgentTeam:
         """
-        Setup the unit executor with the specified agents, LLM, context, and
-        toolbox. The unit executor is used for multi-agent orchestration.
+        Setup the agent team with the specified agents, LLM, context, and
+        toolbox. The AgentTeam object is used for multi-agent orchestration.
 
         :param stage_name: The stage name to setup the agents (e.g. planner,
             executor, verifier).
         :return: The unit executor.
         """
 
-        logger.info(f"Setting up the unit executor for {stage_name}")
+        logger.info(f"Setting up the AgentTeam for {stage_name}")
 
         # Get the agent selector type from the configuration
         agent_selector_type = ""
@@ -281,6 +282,7 @@ class Workflow:
                 | VerifierAgentLogic
                 | ReplannerAgentLogic
                 | ConvPlanReActAgentLogic
+                | ComposerAgentLogic
                 | None
             ) = None
 
@@ -313,7 +315,7 @@ class Workflow:
                 case "Verifier":
                     agent = VerifierAgentLogic(llm, context, agent_prompt_template)
                 case "Composer":
-                    agent = SimpleAgentLogic(llm, context, agent_prompt_template)
+                    agent = ComposerAgentLogic(llm, context, agent_prompt_template)
                 case _:
                     logger.error(f"Agent type {agent_type} is not supported.")
                     agent = None
@@ -362,21 +364,21 @@ class Workflow:
 
         for stage in self._config["workflow"]:
 
-            stage_executor = self.setup_stage_agents(stage)
+            stage_agents = self.setup_stage_agents(stage)
 
             match stage:
                 case "planner":
-                    self._planner = stage_executor
+                    self._planner = stage_agents
                 case "rePlanner":
-                    self._replanner = stage_executor
+                    self._replanner = stage_agents
                 case "planVerifier":
-                    self._plan_verifier = stage_executor
+                    self._plan_verifier = stage_agents
                 case "executor":
-                    self._agents = stage_executor
+                    self._agents = stage_agents
                 case "verifier":
-                    self._verifier = stage_executor
+                    self._verifier = stage_agents
                 case "composer":
-                    self._composer = stage_executor
+                    self._composer = stage_agents
                 case _:
                     logger.error(f"Stage {stage} is not supported.")
                     raise ValueError(f"Stage {stage} is not supported.")

@@ -1,0 +1,50 @@
+workflowName: Composer Team
+workflow:
+  - planner
+  - executor
+  - composer
+planner:
+  - name: alice
+    type: Planner
+    persona: N/A
+    tools: []
+    llm: openai|gpt-4o
+    temperature: 0
+    frequencyPenalty: 0
+    presencePenalty: 0
+    topP: 1
+    maxTokens: 10000
+    stopWords: <PAUSE>, STOP 
+executor:
+  - name: bob
+    type: ReAct
+    persona: >-
+      Research, developer and teacher agent. Always very detailed in responses and due diligent in completing tasks. 
+    tools:
+      - Calculator
+      - CurrentTime
+      - NoAction
+    llm: openai|gpt-4o
+    temperature: 0
+    frequencyPenalty: 0
+    presencePenalty: 0
+    topP: 1
+    maxTokens: 10000
+    stopWords: <PAUSE>, STOP
+composer:
+  - name: charlie
+    type: Composer
+    persona: >-
+      Research, developer and teacher agent. Always very detailed in
+      responses and due diligent in completing tasks. Use markdown in 
+      your response for more readable format. You can use Markdown to 
+      make responses readable. Use all information provided and create verbose and high quality document.
+    tools: []
+    llm: openai|gpt-4o
+    temperature: 0
+    frequencyPenalty: 0
+    presencePenalty: 0
+    topP: 1
+    maxTokens: 10000
+    stopWords: <PAUSE>, STOP
+    
