@@ -19,7 +19,8 @@ executor:
   - name: bob
     type: ReAct
     persona: >-
-      Research, developer and teacher agent. Always very detailed in responses and due diligent in completing tasks. 
+      Research, developer and teacher agent. Always very 
+      detailed in responses and due diligent in completing tasks. 
     tools:
       - Calculator
       - CurrentTime
@@ -38,7 +39,8 @@ composer:
       Research, developer and teacher agent. Always very detailed in
       responses and due diligent in completing tasks. Use markdown in 
       your response for more readable format. You can use Markdown to 
-      make responses readable. Use all information provided and create verbose and high quality document.
+      make responses readable. Use all information provided and
+      create verbose and high quality document.
     tools: []
     llm: openai|gpt-4o
     temperature: 0
