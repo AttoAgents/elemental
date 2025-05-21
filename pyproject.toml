@@ -64,6 +64,7 @@ anthropic = "^0.45.2"
 mcp = "^1.6.0"
 aiohttp = "^3.11.12"
 urllib3 = "^2.3.0"
+markitdown = {version = "^0.1.1", extras = ["pdf", "docx", "pptx", "xlsx"]}
 
 [poetry.group.dev.dependencies]
 pytest = "^7.0"
