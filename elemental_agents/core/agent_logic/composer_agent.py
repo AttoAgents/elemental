@@ -25,7 +25,7 @@ class ComposerAgentLogic(GenericAgentLogic):
         self, model: LLM, context: AgentContext, template: Optional[str] = None
     ) -> None:
         """
-        Initialize the Composer Agent Logic object for simple 
+        Initialize the Composer Agent Logic object for simple
         definition of standard agents.
 
         :param model: The LLM object to use for the agent.

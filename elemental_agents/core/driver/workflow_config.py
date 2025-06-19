@@ -12,6 +12,7 @@ from elemental_agents.core.agent.agent import Agent
 from elemental_agents.core.agent.generic_agent import GenericAgent
 from elemental_agents.core.agent.simple_agent import SimpleAgent
 from elemental_agents.core.agent_logic.agent_model import AgentContext
+from elemental_agents.core.agent_logic.composer_agent import ComposerAgentLogic
 from elemental_agents.core.agent_logic.conv_planreact_agent import (
     ConvPlanReActAgentLogic,
 )
@@ -22,7 +23,6 @@ from elemental_agents.core.agent_logic.react_agent import ReActAgentLogic
 from elemental_agents.core.agent_logic.replanner_agent import ReplannerAgentLogic
 from elemental_agents.core.agent_logic.simple_agent import SimpleAgentLogic
 from elemental_agents.core.agent_logic.verifier_agent import VerifierAgentLogic
-from elemental_agents.core.agent_logic.composer_agent import ComposerAgentLogic
 from elemental_agents.core.agent_team.agent_team import AgentTeam
 from elemental_agents.core.agent_team.generic_agent_team import GenericAgentTeam
 from elemental_agents.core.orchestration.dynamic_agent_orchestrator import (

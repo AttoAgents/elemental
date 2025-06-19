@@ -1,5 +1,5 @@
-<div align="center" style="margin-bottom: 1.5em;"> 
-<img src="https://attoagents.io/images/elemental-main-logo-light.png" width="256" alt="Elemental"> 
+<div align="center"> 
+<img src="https://attoagents.com/images/elemental-main-logo-light--github.png" width="300" alt="Elemental"> 
 </div>
 
 ![GitHub License](https://img.shields.io/github/license/AttoAgents/elemental?style=for-the-badge)

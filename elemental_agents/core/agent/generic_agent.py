@@ -177,7 +177,7 @@ class GenericAgent(Agent):
         elif self._relaxed_react:
             # Agent most likely did not follow the <action> or <result> tags
             # in the response. We will flag this as <result> and return the
-            # result as is. Relaxed ReAct mode is enabled - Function calling 
+            # result as is. Relaxed ReAct mode is enabled - Function calling
             # agent behavior.
             logger.debug(
                 "Agent did not follow the <action> or <result> tags in the response."
@@ -274,9 +274,9 @@ class GenericAgent(Agent):
         else:
             logger.error("No action found in the agent's response.")
             observation = (
-                    "No action found in the agent's response. "
-                    f"Specify <action> or repeat response in {self._termination_sequence} XML tags to give final result."
-                )
+                "No action found in the agent's response. "
+                f"Specify <action> or repeat response in {self._termination_sequence} XML tags to give final result."
+            )
 
         return observation
 
