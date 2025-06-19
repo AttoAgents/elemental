@@ -3,17 +3,16 @@ Abstract class for the Language Model (LLM) in the Elemental framework.
 """
 
 import asyncio
-import io
 import json
-import os
+
 from abc import ABC, abstractmethod
 from base64 import b64encode
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional
 
 import requests.exceptions
 import socketio
 from loguru import logger
-from PIL import Image
+
 from tenacity import (
     retry,
     retry_if_exception_type,
@@ -85,56 +84,6 @@ class LLM(ABC):
         """
         with open(image_path, "rb") as image_file:
             return b64encode(image_file.read()).decode("utf-8")
-
-    def _get_image_data(self, image: Union[str, bytes, Image.Image]) -> Dict:
-        """
-        Process different types of image inputs and convert to the format required by API.
-
-        :param image: Can be a URL, file path, bytes, or PIL Image
-        :return: Dictionary with image data in the format required by API
-        """
-        # If image is a URL
-        if isinstance(image, str) and (
-            image.startswith("http://") or image.startswith("https://")
-        ):
-            return {"url": image}
-
-        # If image is a file path
-        elif isinstance(image, str) and os.path.isfile(image):
-            base64_image = self._encode_image(image)
-            return {"base64": base64_image}
-
-        # If image is bytes
-        elif isinstance(image, bytes):
-            base64_image = b64encode(image).decode("utf-8")
-            return {"base64": base64_image}
-
-        # If image is a PIL Image
-        elif isinstance(image, Image.Image):
-            buffer = io.BytesIO()
-            image.save(buffer, format="PNG")
-            base64_image = b64encode(buffer.getvalue()).decode("utf-8")
-            return {"base64": base64_image}
-
-        else:
-            raise ValueError(
-                "Unsupported image format. Please provide a URL, file path, bytes, or PIL Image."
-            )
-
-    def _has_image_content(self, message: Dict) -> bool:
-        """
-        Check if a message contains image content.
-
-        :param message: The message to check
-        :return: True if the message contains image content, False otherwise
-        """
-        content = message.get("content", "")
-        if isinstance(content, list):
-            return any(
-                item.get("type") == "image" or item.get("type") == "image_url"
-                for item in content
-            )
-        return False
 
     def _get_retry_decorator(self) -> Callable:
         """

@@ -5,7 +5,7 @@ Data model for ModelParameters and Message type.
 import base64
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import List, Optional, Union
 
 from loguru import logger
 from pydantic import BaseModel, Field
@@ -125,7 +125,7 @@ class Message(BaseModel):
                     logger.error(
                         f"Failed to download image from URL {image_source_str}: {e}"
                     )
-                    raise ValueError(f"Failed to download image from URL: {e}")
+                    raise ValueError(f"Failed to download image from URL: {e}") from e
 
             elif os.path.exists(image_source_str):
                 # It's a local file path
@@ -153,7 +153,7 @@ class Message(BaseModel):
             base64_data = base64.b64encode(image_source).decode("utf-8")
             image_content = ImageContent(
                 base64_data=base64_data,
-                media_type="image/png",  # default, could be improved with image type detection
+                media_type="image/png",
             )
             logger.debug("Converted bytes data to base64")
         else:

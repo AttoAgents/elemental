@@ -116,21 +116,6 @@ class OpenAILLM(LLM):
             "content": openai_content if openai_content else content,
         }
 
-    def _has_image_content(self, message: Dict) -> bool:
-        """
-        Check if a message contains image content.
-
-        :param message: The message to check.
-        :return: True if the message contains images, False otherwise.
-        """
-        content = message.get("content", "")
-        if isinstance(content, list):
-            return any(
-                isinstance(item, dict) and item.get("type") == "image"
-                for item in content
-            )
-        return False
-
     def _run_non_streaming(self, messages: List[Dict], stop_list: List[str]) -> str:
         """
         Run the model in non-streaming mode.
