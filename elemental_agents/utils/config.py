@@ -74,6 +74,21 @@ class ConfigModel(BaseSettings):
     llama_cpp_streaming: bool = False
     llama_cpp_model_directory: str = "models"
 
+    # Azure OpenAI configuration
+    azure_openai_api_key: str = ""
+    azure_openai_endpoint: str = ""
+    azure_openai_deployment_name: str = ""
+    azure_openai_api_version: str = "2024-02-15-preview"
+    azure_openai_streaming: bool = False
+
+    # AWS Bedrock configuration
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
+    aws_session_token: str = ""
+    aws_region: str = "us-east-1"
+    bedrock_anthropic_model_id: str = "anthropic.claude-3-sonnet-20240229-v1:0"
+    bedrock_anthropic_streaming: bool = False
+
     default_engine: str = ""
     default_model_name: str = ""
     default_vector_size: int = 0

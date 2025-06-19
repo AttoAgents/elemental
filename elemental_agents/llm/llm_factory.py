@@ -8,9 +8,9 @@ from loguru import logger
 
 from elemental_agents.llm.data_model import ModelParameters
 from elemental_agents.llm.llm import LLM
-from elemental_agents.llm.llm_ollama import OllamaLLM
-from elemental_agents.llm.llm_openai import OpenAILLM
-from elemental_agents.llm.llm_anthropic import AnthropicLLM
+
+
+
 
 from elemental_agents.utils.config import ConfigModel
 
@@ -53,6 +53,8 @@ class LLMFactory:
 
         if local_engine_name == "ollama":
 
+            from elemental_agents.llm.llm_ollama import OllamaLLM
+
             local_model_name = (
                 llm_parameters[1]
                 if len(llm_parameters) > 1
@@ -72,6 +74,8 @@ class LLMFactory:
             return ollama_llm
 
         if local_engine_name == "openai":
+
+            from elemental_agents.llm.llm_openai import OpenAILLM
 
             local_model_name = (
                 llm_parameters[1]
@@ -94,6 +98,8 @@ class LLMFactory:
 
         if local_engine_name == "anthropic":
 
+            from elemental_agents.llm.llm_anthropic import AnthropicLLM
+
             local_model_name = (
                 llm_parameters[1]
                 if len(llm_parameters) > 1
@@ -114,6 +120,8 @@ class LLMFactory:
 
         if local_engine_name == "custom":
 
+            from elemental_agents.llm.llm_openai import OpenAILLM
+
             local_model_name = (
                 llm_parameters[1]
                 if len(llm_parameters) > 1
@@ -132,6 +140,55 @@ class LLMFactory:
                 url=self._config.custom_url,
             )
             return openai_llm
+
+        if local_engine_name == "azure_openai":
+
+            from elemental_agents.llm.llm_azure_openai import AzureOpenAILLM
+
+            local_model_name = (
+                llm_parameters[1]
+                if len(llm_parameters) > 1
+                else self._config.azure_openai_deployment_name
+            )
+
+            logger.debug("Creating Azure OpenAI LLM instance.")
+            logger.debug(f"Deployment name: {local_model_name}")
+
+            azure_openai_llm = AzureOpenAILLM(
+                model_name=local_model_name,
+                message_stream=self._config.azure_openai_streaming,
+                stream_url=self._config.websocket_url,
+                parameters=model_parameters,
+                api_key=self._config.azure_openai_api_key,
+                azure_endpoint=self._config.azure_openai_endpoint,
+                api_version=self._config.azure_openai_api_version,
+            )
+            return azure_openai_llm
+
+        if local_engine_name == "bedrock_anthropic":
+
+            from elemental_agents.llm.llm_bedrock_anthropic import BedrockAnthropicLLM
+
+            local_model_name = (
+                llm_parameters[1]
+                if len(llm_parameters) > 1
+                else self._config.bedrock_anthropic_model_id
+            )
+
+            logger.debug("Creating Bedrock Anthropic LLM instance.")
+            logger.debug(f"Model ID: {local_model_name}")
+
+            bedrock_anthropic_llm = BedrockAnthropicLLM(
+                model_name=local_model_name,
+                message_stream=self._config.bedrock_anthropic_streaming,
+                stream_url=self._config.websocket_url,
+                parameters=model_parameters,
+                aws_access_key_id=self._config.aws_access_key_id,
+                aws_secret_access_key=self._config.aws_secret_access_key,
+                aws_session_token=self._config.aws_session_token,
+                region_name=self._config.aws_region,
+            )
+            return bedrock_anthropic_llm
 
         logger.error(f"Unknown model name: {engine_name}")
         raise ValueError(f"Unknown model name: {engine_name}")
