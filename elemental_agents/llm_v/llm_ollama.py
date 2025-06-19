@@ -154,7 +154,7 @@ class OllamaLLM(LLM):
             api_params["think"] = True
             logger.debug("Using thinking mode")
 
-        output = self._client.chat(**api_params) # type: ignore
+        output = self._client.chat(**api_params)  # type: ignore
 
         # Handle thinking content
         if isinstance(output, dict) and "message" in output:
@@ -186,7 +186,7 @@ class OllamaLLM(LLM):
         ):
             api_params["think"] = True
 
-        return self._client.chat(**api_params) # type: ignore
+        return self._client.chat(**api_params)  # type: ignore
 
     def _extract_content_from_chunk(self, chunk: Any) -> Optional[str]:
         """

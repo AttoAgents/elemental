@@ -11,10 +11,10 @@ llm_parameters = ModelParameters()
 llm_factory = LLMFactory()
 
 models = {
-        "openai": "openai|gpt-4.1", 
-        "anthropic": "anthropic|claude-sonnet-4-20250514", 
-        "ollama": "ollama|gemma3:latest" 
-    }
+    "openai": "openai|gpt-4.1",
+    "anthropic": "anthropic|claude-sonnet-4-20250514",
+    "ollama": "ollama|gemma3:latest",
+}
 
 for model_name, model_type in models.items():
 

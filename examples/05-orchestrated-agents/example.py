@@ -32,9 +32,7 @@ executor_agent = factory.create(
     ],
 )
 
-orchestrator = DynamicAgentOrchestrator(
-    planner=planner_agent, executor=executor_agent
-)
+orchestrator = DynamicAgentOrchestrator(planner=planner_agent, executor=executor_agent)
 
 result = orchestrator.run(
     instruction="Create FastAPI backend for a TODO application.",

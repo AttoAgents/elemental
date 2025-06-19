@@ -163,7 +163,7 @@ class OpenAILLM(LLM):
             api_params["reasoning_effort"] = self._reasoning_effort
             logger.debug(f"Using reasoning effort: {self._reasoning_effort}")
 
-        output: ChatCompletion = self._client.chat.completions.create(**api_params) # type: ignore
+        output: ChatCompletion = self._client.chat.completions.create(**api_params)  # type: ignore
 
         result = output.choices[0].message.content
         if output.usage:
@@ -197,7 +197,7 @@ class OpenAILLM(LLM):
         if self._reasoning_effort and ("o1" in self._model or "o3" in self._model):
             api_params["reasoning_effort"] = self._reasoning_effort
 
-        return self._client.chat.completions.create(**api_params) # type: ignore
+        return self._client.chat.completions.create(**api_params)  # type: ignore
 
     def _extract_content_from_chunk(self, chunk: Any) -> Optional[str]:
         """

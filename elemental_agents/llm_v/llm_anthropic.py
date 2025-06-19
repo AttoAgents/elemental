@@ -186,7 +186,7 @@ class AnthropicLLM(LLM):
             api_params["thinking"] = thinking_config
             logger.debug(f"Using thinking mode with config: {thinking_config}")
 
-        output = self._client.messages.create(**api_params) # type: ignore
+        output = self._client.messages.create(**api_params)  # type: ignore
 
         # Handle thinking content
         if hasattr(output, "content") and isinstance(output.content, list):
@@ -232,7 +232,7 @@ class AnthropicLLM(LLM):
                 thinking_config["budget_tokens"] = self._thinking_budget_tokens
             api_params["thinking"] = thinking_config
 
-        return self._client.messages.create(**api_params) # type: ignore
+        return self._client.messages.create(**api_params)  # type: ignore
 
     def _extract_content_from_chunk(self, chunk: Any) -> Optional[str]:
         """
