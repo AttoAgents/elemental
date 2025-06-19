@@ -49,6 +49,17 @@ class LlamaCppLLM(LLM):
             n_threads=n_threads,
         )
 
+    def _convert_message_for_llama(self, message: Dict) -> Dict:
+        """
+        Convert message format to Llama CPP expected format.
+        Currently, Llama CPP expects messages as list of dicts with role and content.
+
+        :param message: Message in internal format
+        :return: Message in Llama CPP format
+        """
+        # Llama CPP expects role and content as is, no special conversion needed
+        return message
+
     def _run_non_streaming(self, messages: List[Dict], stop_list: List[str]) -> str:
         """
         Run the model in non-streaming mode.
@@ -58,17 +69,18 @@ class LlamaCppLLM(LLM):
         :return: Model response
         """
         try:
-            response: CreateChatCompletionResponse = (
-                self.llm_model.create_chat_completion(
-                    messages=messages,  # type: ignore
-                    temperature=self._temperature,
-                    stop=stop_list,
-                    max_tokens=self._max_tokens,
-                    presence_penalty=self._presence_penalty,
-                    frequency_penalty=self._frequency_penalty,
-                    top_p=self._top_p,
-                    stream=False,
-                )
+            # Convert messages if needed
+            llama_messages = [self._convert_message_for_llama(msg) for msg in messages]
+
+            response: CreateChatCompletionResponse = self.llm_model.create_chat_completion(
+                messages=llama_messages,  # type: ignore
+                temperature=self._temperature,
+                stop=stop_list,
+                max_tokens=self._max_tokens,
+                presence_penalty=self._presence_penalty,
+                frequency_penalty=self._frequency_penalty,
+                top_p=self._top_p,
+                stream=False,
             )
 
             output = response["choices"][0]["message"]["content"]
@@ -86,10 +98,11 @@ class LlamaCppLLM(LLM):
         :return: Stream object from the model
         """
         try:
-            # Create a generator that yields chunks from llama-cpp
+            llama_messages = [self._convert_message_for_llama(msg) for msg in messages]
+
             def stream_generator() -> Any:
                 stream = self.llm_model.create_chat_completion(
-                    messages=messages,  # type: ignore
+                    messages=llama_messages,  # type: ignore
                     temperature=self._temperature,
                     stop=stop_list,
                     max_tokens=self._max_tokens,
@@ -113,7 +126,6 @@ class LlamaCppLLM(LLM):
         :return: The content from the chunk, or None if no content
         """
         try:
-            # Extract content from the streaming chunk
             if chunk and "choices" in chunk and len(chunk["choices"]) > 0:
                 delta = chunk["choices"][0].get("delta", {})
                 if "content" in delta and delta["content"]:

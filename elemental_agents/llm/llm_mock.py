@@ -72,7 +72,6 @@ class MockLLM(LLM):
         :return: Stream object from the model
         """
         try:
-            # Generate a mock response
             if len(messages) > 0:
                 last_message = messages[-1]
                 if last_message["role"] == "user":
@@ -87,13 +86,10 @@ class MockLLM(LLM):
                 full_response = "No messages to process."
                 logger.error("No messages have been provided to the model.")
 
-            # Create a generator that simulates streaming by yielding one character at a time
             async def stream_generator() -> Any:
                 for i, resp in enumerate(full_response):
-                    # Create a mock chunk with the next character
                     chunk = {"content": resp, "index": i}
                     yield chunk
-                    # Add a small delay to simulate real streaming
                     await asyncio.sleep(0)
 
             return stream_generator()
@@ -109,7 +105,6 @@ class MockLLM(LLM):
         :return: The content from the chunk, or None if no content
         """
         try:
-            # Extract content from the mock chunk
             if chunk and "content" in chunk:
                 return chunk["content"]
             return None

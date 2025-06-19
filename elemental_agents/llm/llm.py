@@ -4,12 +4,15 @@ Abstract class for the Language Model (LLM) in the Elemental framework.
 
 import asyncio
 import json
+
 from abc import ABC, abstractmethod
+from base64 import b64encode
 from typing import Any, Callable, Dict, List, Optional
 
 import requests.exceptions
 import socketio
 from loguru import logger
+
 from tenacity import (
     retry,
     retry_if_exception_type,
@@ -54,6 +57,11 @@ class LLM(ABC):
         self._presence_penalty = parameters.presence_penalty
         self._top_p = parameters.top_p
 
+        # Reasoning parameters
+        self._reasoning_effort = parameters.reasoning_effort
+        self._thinking_enabled = parameters.thinking_enabled
+        self._thinking_budget_tokens = parameters.thinking_budget_tokens
+
         if parameters.stop is None:
             self._stop = []
         else:
@@ -66,6 +74,16 @@ class LLM(ABC):
         :param temperature: The temperature to set.
         """
         self._temperature = temperature
+
+    def _encode_image(self, image_path: str) -> str:
+        """
+        Encode an image file to base64 string.
+
+        :param image_path: Path to the image file
+        :return: Base64 encoded string
+        """
+        with open(image_path, "rb") as image_file:
+            return b64encode(image_file.read()).decode("utf-8")
 
     def _get_retry_decorator(self) -> Callable:
         """
@@ -107,6 +125,11 @@ class LLM(ABC):
                 if len(msg) == 0:
                     logger.error("No messages have been provided to the model.")
                     return "No messages to process."
+
+                # Check if any messages contain images
+                has_images = any(message.is_multimodal() for message in messages)
+                if has_images:
+                    logger.debug("Processing multimodal messages with images")
 
                 # Prepare stop words
                 stop_list = self._stop.copy() if self._stop else []
@@ -261,6 +284,7 @@ class LLM(ABC):
     async def connect(self) -> bool:
         """
         Ensure the Socket.IO client is properly connected before sending messages.
+        Uses tenacity for exponential backoff retry logic.
         """
         if not self._stream_url:
             logger.error("Stream URL is not set or empty.")
@@ -270,44 +294,45 @@ class LLM(ABC):
         if self._sio is None:
             self._sio = socketio.AsyncClient(reconnection=True, reconnection_attempts=5)
 
-        sio_state = self._sio.eio.state if self._sio is not None else "N/A"
-        logger.debug(
-            ("Connecting to WebSocket server... " f"Current state {sio_state}")
-        )
-
         # If already connected, no need to reconnect
         if self._sio is not None and self._sio.connected:
             logger.info("Already connected to WebSocket server")
             return True
 
-        max_retries = 5
-        base_delay = 1  # seconds
-
-        for attempt in range(1, max_retries + 1):
-            try:
-                logger.debug(f"Connection attempt {attempt} to {self._stream_url}")
-                if self._sio is not None:
-                    await self._sio.connect(self._stream_url, wait_timeout=5)
-                    logger.info("Connected to WebSocket server")
-                    return True
-            except socketio.exceptions.ConnectionError as e:
-                logger.warning(f"Connection attempt {attempt} failed: {e}")
-            except asyncio.TimeoutError:
-                logger.warning(f"Connection attempt {attempt} timed out.")
-            except Exception as e:
-                logger.error(
-                    f"Unexpected error during connection attempt {attempt}: {e}"
+        # Define retry decorator for connection attempts
+        @retry(
+            stop=stop_after_attempt(5),  # Try 5 times
+            wait=wait_exponential(multiplier=1, min=1, max=10),  # Exponential backoff
+            retry=retry_if_exception_type(
+                (
+                    socketio.exceptions.ConnectionError,
+                    asyncio.TimeoutError,
+                    Exception,
                 )
-
-            # Exponential backoff delay before next retry
-            delay = base_delay * (2 ** (attempt - 1))
-            logger.info(f"Retrying in {delay} seconds...")
-            await asyncio.sleep(delay)
-
-        logger.error(
-            f"Failed to connect to WebSocket server after {max_retries} attempts."
+            ),
+            reraise=False,  # Don't reraise the exception, we'll handle it
         )
-        return False
+        async def _connect_with_retry() -> bool:
+            """
+            Attempt to connect to the WebSocket server with exponential backoff.
+            """
+            sio_state = self._sio.eio.state if self._sio is not None else "N/A"
+            logger.debug(f"Connecting to WebSocket server... Current state {sio_state}")
+
+            if self._sio is not None:
+                await self._sio.connect(self._stream_url, wait_timeout=5)
+                logger.info("Connected to WebSocket server")
+                return True
+            return False
+
+        try:
+            result = await _connect_with_retry()
+            return result
+        except Exception as e:
+            logger.error(
+                f"Failed to connect to WebSocket server after multiple attempts: {e}"
+            )
+            return False
 
     async def disconnect(self) -> None:
         """
