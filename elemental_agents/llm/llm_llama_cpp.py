@@ -72,15 +72,17 @@ class LlamaCppLLM(LLM):
             # Convert messages if needed
             llama_messages = [self._convert_message_for_llama(msg) for msg in messages]
 
-            response: CreateChatCompletionResponse = self.llm_model.create_chat_completion(
-                messages=llama_messages,  # type: ignore
-                temperature=self._temperature,
-                stop=stop_list,
-                max_tokens=self._max_tokens,
-                presence_penalty=self._presence_penalty,
-                frequency_penalty=self._frequency_penalty,
-                top_p=self._top_p,
-                stream=False,
+            response: CreateChatCompletionResponse = (
+                self.llm_model.create_chat_completion(
+                    messages=llama_messages,  # type: ignore
+                    temperature=self._temperature,
+                    stop=stop_list,
+                    max_tokens=self._max_tokens,
+                    presence_penalty=self._presence_penalty,
+                    frequency_penalty=self._frequency_penalty,
+                    top_p=self._top_p,
+                    stream=False,
+                )
             )
 
             output = response["choices"][0]["message"]["content"]

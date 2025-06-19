@@ -56,7 +56,7 @@ class BedrockAnthropicLLM(LLM):
             aws_session_token=aws_session_token,
             region_name=region_name,
         )
-        
+
         self._client = session.client("bedrock-runtime")
         self._region_name = region_name
 
@@ -201,7 +201,9 @@ class BedrockAnthropicLLM(LLM):
             response_body = json.loads(response["body"].read())
 
             # Handle thinking content
-            if "content" in response_body and isinstance(response_body["content"], list):
+            if "content" in response_body and isinstance(
+                response_body["content"], list
+            ):
                 result_parts = []
                 for block in response_body["content"]:
                     if isinstance(block, dict):
@@ -255,7 +257,7 @@ class BedrockAnthropicLLM(LLM):
             )
 
             def stream_generator() -> Any:
-                """                
+                """
                 Generator to yield chunks from the Bedrock response stream.
                 """
                 for event in response["body"]:

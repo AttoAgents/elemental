@@ -4,7 +4,6 @@ Abstract class for the Language Model (LLM) in the Elemental framework.
 
 import asyncio
 import json
-
 from abc import ABC, abstractmethod
 from base64 import b64encode
 from typing import Any, Callable, Dict, List, Optional
@@ -12,7 +11,6 @@ from typing import Any, Callable, Dict, List, Optional
 import requests.exceptions
 import socketio
 from loguru import logger
-
 from tenacity import (
     retry,
     retry_if_exception_type,
