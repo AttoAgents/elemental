@@ -22,6 +22,7 @@ Elemental is a general-purpose, multi-agent framework for automating tasks using
 - Tool execution with extendable interface to provide native tools executable with any language model.
 - Reasoning and conversational agent prompt strategies.
 - MCP Tools with complete toolset or individual tool level selection.
+- Text and multi-modal messages
 
 ## Getting started 
 
@@ -75,22 +76,19 @@ from loguru import logger
 
 from elemental_agents.core.agent.agent_factory import AgentFactory
 
-if __name__ == "__main__":
+TASK = "Why is the sky blue?"
+SESSION = "TestSession"
 
-    TASK = "Why is the sky blue?"
-    SESSION = "TestSession"
+factory = AgentFactory()
+assistant = factory.create(
+    agent_name="AssistantAgent",
+    agent_persona="Simple always helpful assistant",
+    agent_type="simple",
+    llm_model="ollama|gemma3",
+)
 
-    factory = AgentFactory()
-    assistant = factory.create(
-        agent_name="AssistantAgent",
-        agent_persona="Simple always helpful assistant",
-        agent_type="simple",
-        llm_model="ollama|gemma3",
-    )
-
-    result = assistant.run(task=TASK, input_session=SESSION)
-    logger.info(f"Result: {result}")
-
+result = assistant.run(task=TASK, input_session=SESSION)
+logger.info(f"Result: {result}")
 ```
 
 In this case we utilize [Ollama](https://ollama.com) with Gemma3 model ([See example 1](https://github.com/AttoAgents/elemental/blob/main/examples/01-simple-assistant/example.py)).
@@ -104,22 +102,19 @@ from loguru import logger
 
 from elemental_agents.core.agent.agent_factory import AgentFactory
 
-if __name__ == "__main__":
+TASK = "Calculate the sum of 5 and 3."
+SESSION = "Test Session"
 
-    TASK = "Calculate the sum of 5 and 3."
-    SESSION = "Test Session"
-
-    factory = AgentFactory()
-    assistant = factory.create(
-        agent_name="AssistantAgent",
-        agent_persona="You are a helpful assistant.",
-        agent_type="ReAct",
-        llm_model="openai|gpt-4.1-mini",
-        tools=["Calculator", "CurrentTime", "NoAction"],
-    )
-    result = assistant.run(task=TASK, input_session=SESSION)
-    logger.info(f"Result: {result}")
-
+factory = AgentFactory()
+assistant = factory.create(
+    agent_name="AssistantAgent",
+    agent_persona="You are a helpful assistant.",
+    agent_type="ReAct",
+    llm_model="openai|gpt-4.1-mini",
+    tools=["Calculator", "CurrentTime", "NoAction"],
+)
+result = assistant.run(task=TASK, input_session=SESSION)
+logger.info(f"Result: {result}")
 ```
 
 The task demonstrates the need to use the `Calculator` tool. In this example we utilize language model provided by [OpenAI](https://openai.com) API. 
@@ -136,22 +131,19 @@ from loguru import logger
 
 from elemental_agents.core.agent.agent_factory import AgentFactory
 
-if __name__ == "__main__":
+TASK = "Calculate the sum of 5 and 3."
+SESSION = "Test Session"
 
-    TASK = "Calculate the sum of 5 and 3."
-    SESSION = "Test Session"
-
-    factory = AgentFactory()
-    assistant = factory.create(
-        agent_name="AssistantAgent",
-        agent_persona="You are a helpful assistant.",
-        agent_type="PlanReAct",
-        llm_model="openai|gpt-4.1-mini",
-        tools=["Calculator", "CurrentTime", "NoAction"],
-    )
-    result = assistant.run(task=TASK, input_session=SESSION)
-    logger.info(f"Result: {result}")
-
+factory = AgentFactory()
+assistant = factory.create(
+    agent_name="AssistantAgent",
+    agent_persona="You are a helpful assistant.",
+    agent_type="PlanReAct",
+    llm_model="openai|gpt-4.1-mini",
+    tools=["Calculator", "CurrentTime", "NoAction"],
+)
+result = assistant.run(task=TASK, input_session=SESSION)
+logger.info(f"Result: {result}")
 ```
 
 ### Conversational agent team 
@@ -165,36 +157,34 @@ from elemental_agents.core.agent.agent_factory import AgentFactory
 from elemental_agents.core.agent_team.generic_agent_team import GenericAgentTeam
 from elemental_agents.core.selector.agent_selector_factory import AgentSelectorFactory
 
-if __name__ == "__main__":
+factory = AgentFactory()
+agent1 = factory.create(
+    agent_name="AssistantAgent",
+    agent_persona="You are a helpful assistant.",
+    agent_type="ConvPlanReAct",
+    llm_model="openai|gpt-4.1-mini",
+    tools=["Calculator", "CurrentTime", "NoAction"],
+)
+agent2 = factory.create(
+    agent_name="ProgrammerAgent",
+    agent_persona="You are a helpful programmer.",
+    agent_type="ConvPlanReAct",
+    llm_model="openai|gpt-4.1-mini",
+    tools=["Calculator", "CurrentTime", "NoAction"],
+)
 
-    factory = AgentFactory()
-    agent1 = factory.create(
-        agent_name="AssistantAgent",
-        agent_persona="You are a helpful assistant.",
-        agent_type="ConvPlanReAct",
-        llm_model="openai|gpt-4.1-mini",
-        tools=["Calculator", "CurrentTime", "NoAction"],
-    )
-    agent2 = factory.create(
-        agent_name="ProgrammerAgent",
-        agent_persona="You are a helpful programmer.",
-        agent_type="ConvPlanReAct",
-        llm_model="openai|gpt-4.1-mini",
-        tools=["Calculator", "CurrentTime", "NoAction"],
-    )
+selector_factory = AgentSelectorFactory()
+agent_selector = selector_factory.create(
+    selector_name="conversational", lead_agent="AssistantAgent"
+)
+agent_team = GenericAgentTeam(selector=agent_selector)
+agent_team.register_agent("AssistantAgent", agent1, "ConvPlanReAct")
+agent_team.register_agent("ProgrammerAgent", agent2, "ConvPlanReAct")
 
-    selector_factory = AgentSelectorFactory()
-    agent_selector = selector_factory.create(
-        selector_name="conversational", lead_agent="AssistantAgent"
-    )
-    agent_team = GenericAgentTeam(selector=agent_selector)
-    agent_team.register_agent("AssistantAgent", agent1, "ConvPlanReAct")
-    agent_team.register_agent("ProgrammerAgent", agent2, "ConvPlanReAct")
-
-    result = agent_team.run(
-        task="What is the color of sky on Mars?", input_session="Example Session"
-    )
-    logger.info(f"Result: {result}")
+result = agent_team.run(
+    task="What is the color of sky on Mars?", input_session="Example Session"
+)
+logger.info(f"Result: {result}")
 ```
 
 The above task does not require (or potentially employ the conversation).  
@@ -214,39 +204,36 @@ from elemental_agents.core.orchestration.dynamic_agent_orchestrator import (
     DynamicAgentOrchestrator,
 )
 
-if __name__ == "__main__":
+factory = AgentFactory()
 
-    factory = AgentFactory()
+planner_agent = factory.create(
+    agent_name="PlannerAgent",
+    agent_persona="",
+    agent_type="planner",
+    llm_model="openai|gpt-4.1-mini",
+)
+executor_agent = factory.create(
+    agent_name="ExecutorAgent",
+    agent_persona="You are an expert software engineer.",
+    agent_type="ReAct",
+    llm_model="openai|gpt-4.1-mini",
+    tools=[
+            "Calculator",
+            "CurrentTime",
+            "NoAction",
+            "ReadFiles",
+            "WriteFile",
+            "ListFiles"
+        ],
+)
 
-    planner_agent = factory.create(
-        agent_name="PlannerAgent",
-        agent_persona="",
-        agent_type="planner",
-        llm_model="openai|gpt-4.1-mini",
-    )
-    executor_agent = factory.create(
-        agent_name="ExecutorAgent",
-        agent_persona="You are an expert software engineer.",
-        agent_type="ReAct",
-        llm_model="openai|gpt-4.1-mini",
-        tools=[
-                "Calculator",
-                "CurrentTime",
-                "NoAction",
-                "ReadFiles",
-                "WriteFile",
-                "ListFiles"
-            ],
-    )
+orchestrator = DynamicAgentOrchestrator(planner=planner_agent, executor=executor_agent)
 
-    orchestrator = DynamicAgentOrchestrator(planner=planner_agent, executor=executor_agent)
-
-    result = orchestrator.run(
-        instruction="Create FastAPI backend for a TODO application.",
-        input_session="Example Session"
-    )
-    logger.info(f"Result: {result}")
-
+result = orchestrator.run(
+    instruction="Create FastAPI backend for a TODO application.",
+    input_session="Example Session"
+)
+logger.info(f"Result: {result}")
 ```
 
 The above example utilizes two steps in the workflow that `DynamicAgentOrchestrator` manages. The complete list includes `planner`, `plan_verifier`, `replanner`, `executor`, `verifier`, and `composer`.
@@ -309,21 +296,19 @@ from loguru import logger
 
 from elemental_agents.core.agent.agent_factory import AgentFactory
 
-if __name__ == "__main__":
+TASK = "Search Github repositories for REST API creation in Python."
+SESSION = "Test Session"
 
-    TASK = "Search Github repositories for REST API creation in Python."
-    SESSION = "Test Session"
-
-    factory = AgentFactory()
-    assistant = factory.create(
-        agent_name="AssistantAgent",
-        agent_persona="You are a helpful assistant.",
-        agent_type="ReAct",
-        llm_model="openai|gpt-4.1-mini",
-        tools=["Calculator", "CurrentTime", "NoAction", "MCP|Github|search_repositories"],
-    )
-    result = assistant.run(task=TASK, input_session=SESSION)
-    logger.info(f"Result: {result}")
+factory = AgentFactory()
+assistant = factory.create(
+    agent_name="AssistantAgent",
+    agent_persona="You are a helpful assistant.",
+    agent_type="ReAct",
+    llm_model="openai|gpt-4.1-mini",
+    tools=["Calculator", "CurrentTime", "NoAction", "MCP|Github|search_repositories"],
+)
+result = assistant.run(task=TASK, input_session=SESSION)
+logger.info(f"Result: {result}")
 ```
 
 To make all tools provided by an MCP server available to the agent use `MCP|server_name|*` as a tool name. This will query the tools and register all of them. The example above may be modified by changing `MCP|Github|search_repositories` to `MCP|Github|*` ([See example 8](https://github.com/AttoAgents/elemental/blob/main/examples/08-mcp-tools-all-tools/example.py)).
