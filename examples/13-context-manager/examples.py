@@ -1,6 +1,7 @@
 """
 Examples of using the simplified LLM Context Manager.
 """
+from loguru import logger
 
 from elemental_agents.core.context.context_manager import (
     ContextConfig,
@@ -19,7 +20,7 @@ def example_basic_usage() -> None:
 
     # Get context data
     context_data = manager.gather_context(
-        "./elemental_agents/llm_v", include_content=True
+        "./elemental_agents/llm", include_content=True
     )
 
     # Format for LLM
@@ -41,7 +42,7 @@ def example_custom_config() -> None:
     )
 
     manager = LLMContextManager(config=config)
-    context_data = manager.gather_context("./", include_content=True)
+    context_data = manager.gather_context("./elemental_agents/llm", include_content=True)
     formatted_context = manager.format_context(context_data)
 
     print("=== Custom Config Context ===")
@@ -56,7 +57,7 @@ def example_file_list_only() -> None:
     manager = LLMContextManager()
 
     # Get just file list without content
-    files = manager.get_file_list("./elemental_agents/llm_v")
+    files = manager.get_file_list("./elemental_agents/llm")
     print("=== File List Only ===")
     for file_info in files:
         print(f"- {file_info.relative_path} ({file_info.size} bytes)")
@@ -68,12 +69,12 @@ def example_convenience_functions() -> None:
     Example of using convenience functions to create context from files.
     """
     # Quick context
-    context = create_file_context("./src", include_content=True)
+    context = create_file_context("./elemental_agents/llm", include_content=True)
     print("=== Quick Context ===")
     print(context[:500] + "..." if len(context) > 500 else context)
 
     # Code-optimized context
-    code_context = create_code_file_context("./src")
+    code_context = create_code_file_context("./elemental_agents/llm")
     print("\n=== Code Context ===")
     print(code_context[:500] + "..." if len(code_context) > 500 else code_context)
 
@@ -83,8 +84,8 @@ def example_llm_integration() -> None:
     """
     Example of integrating the context manager with an LLM for code analysis.
     """
-    from elemental_agents.llm_v.data_model import Message
-    from elemental_agents.llm_v.llm_factory import LLMFactory
+    from elemental_agents.llm.data_model import Message
+    from elemental_agents.llm.llm_factory import LLMFactory
 
     # Create context
     context = create_code_file_context("./elemental_agents/llm_v")
@@ -104,11 +105,11 @@ Please analyze the code structure and provide insights.""",
     )
 
     # Use with LLM (uncomment to test)
-    # factory = LLMFactory()
-    # llm = factory.create("openai|gpt-4")
-    # result = llm.run([system_message, user_message])
-    # print("=== LLM Analysis ===")
-    # print(result)
+    factory = LLMFactory()
+    llm = factory.create("openai|gpt-4.1")
+    result = llm.run([system_message, user_message])
+    logger.info("=== LLM Analysis ===")
+    print(result)
 
 
 if __name__ == "__main__":

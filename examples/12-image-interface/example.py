@@ -4,8 +4,8 @@ Example of LLM module usage with images.
 
 from loguru import logger
 
-from elemental_agents.llm_v.data_model import Message, ModelParameters
-from elemental_agents.llm_v.llm_factory import LLMFactory
+from elemental_agents.llm.data_model import Message, ModelParameters
+from elemental_agents.llm.llm_factory import LLMFactory
 
 llm_parameters = ModelParameters()
 llm_factory = LLMFactory()

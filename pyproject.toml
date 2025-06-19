@@ -86,6 +86,7 @@ disable = [
     "inconsistent-return-statements",
     "too-many-locals",
     "too-many-branches",
+    "import-outside-toplevel",
 ]
 
 [tool.coverage.report]
