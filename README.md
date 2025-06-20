@@ -4,7 +4,6 @@
 
 ![GitHub License](https://img.shields.io/github/license/AttoAgents/elemental?style=for-the-badge)
 ![PyPI - Version](https://img.shields.io/pypi/v/elemental-agents?style=for-the-badge)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/elemental-agents?style=for-the-badge&color=%231c4167)
 
 
 ---
@@ -15,6 +14,7 @@ Elemental is a general-purpose, multi-agent framework for automating tasks using
 
 - Multi-agent task execution.
 - Custom language model per agent (including different inference engines and size of the model - direct support for Ollama, Llama.cpp, OpenAI and compatible APIs, Anthropic).
+- Multi-modal messages with OpenAI, Anthropic, and Ollama.
 - Simple model selection per agent e.g. `ollama|gemma3` or `openai|gpt-4.1-mini`.
 - Customizable templates with variables in Jinja format.
 - Default dynamic orchestrator with dynamic planning, execution, re-planning, composition and verification steps.
@@ -22,7 +22,7 @@ Elemental is a general-purpose, multi-agent framework for automating tasks using
 - Tool execution with extendable interface to provide native tools executable with any language model.
 - Reasoning and conversational agent prompt strategies.
 - MCP Tools with complete toolset or individual tool level selection.
-- Text and multi-modal messages
+- Context Manager for bringing files into the message.
 
 ## Getting started 
 
