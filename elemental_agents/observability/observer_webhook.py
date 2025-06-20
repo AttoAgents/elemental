@@ -10,13 +10,20 @@ from elemental_agents.observability.observer_data_model import (
     ObserverMessage,
     ObserverSession,
     ObserverTask,
+    ObserverToolCall,
 )
 
 
 def send_to_webhook(
     webhook_url: str,
     payload_type: str,
-    payload: ObserverMessage | ObserverTask | ObserverInteraction | ObserverSession,
+    payload: (
+        ObserverMessage
+        | ObserverTask
+        | ObserverInteraction
+        | ObserverSession
+        | ObserverToolCall
+    ),
 ) -> None:
     """
     Send the observer data to a webhook.

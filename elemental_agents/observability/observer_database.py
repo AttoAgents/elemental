@@ -18,6 +18,7 @@ from elemental_agents.observability.observer_data_model import (
     ObserverMessage,
     ObserverSession,
     ObserverTask,
+    ObserverToolCall,
     ObserverWorkflow,
 )
 
@@ -633,11 +634,11 @@ class ObserverDatabase:
                 )
                 session.add(new_workflow)
 
-    def add_tool_call(self, tool_call_data: ObserverToolCallRecord) -> None:
+    def add_tool_call(self, tool_call_data: ObserverToolCall) -> None:
         """
         Adds a new tool call to the ObserverToolCallRecord table.
 
-        :param tool_call_data: An ObserverToolCallRecord pydantic model containing tool call details.
+        :param tool_call_data: An ObserverToolCall pydantic model containing tool call details.
         """
         with self.session_scope() as session:
             new_tool_call = ObserverToolCallRecord(
