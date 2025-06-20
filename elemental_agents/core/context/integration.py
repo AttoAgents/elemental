@@ -9,7 +9,7 @@ from elemental_agents.core.context.context_manager import (
     ContextConfig,
     create_file_context,
 )
-from elemental_agents.llm_v.data_model import Message
+from elemental_agents.llm.data_model import Message
 
 
 def create_context_message(

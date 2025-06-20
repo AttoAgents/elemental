@@ -67,6 +67,7 @@ boto3 = "^1.38.40"
 
 [poetry.group.dev.dependencies]
 pytest = "^7.0"
+pytest-cov = "^6.2.1"
 black = "^23.0"
 pylint = "^2.15"
 mypy = "^1.1"
@@ -106,8 +107,24 @@ strict = false
 [tool.isort]
 profile = "black"  
 line_length = 88
-known_first_party = ["elemental"]
+known_first_party = ["elemental_agents"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+    "--disable-warnings",
+    "--cov=elemental_agents",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning"
+]

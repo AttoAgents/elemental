@@ -1,6 +1,7 @@
 """
 Examples of using the simplified LLM Context Manager.
 """
+
 from loguru import logger
 
 from elemental_agents.core.context.context_manager import (
@@ -42,7 +43,9 @@ def example_custom_config() -> None:
     )
 
     manager = LLMContextManager(config=config)
-    context_data = manager.gather_context("./elemental_agents/llm", include_content=True)
+    context_data = manager.gather_context(
+        "./elemental_agents/llm", include_content=True
+    )
     formatted_context = manager.format_context(context_data)
 
     print("=== Custom Config Context ===")
