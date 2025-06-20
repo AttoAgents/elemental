@@ -224,7 +224,9 @@ class TestOpenAILLM(unittest.TestCase):
         self.assertEqual(result, message)
 
     @patch("elemental_agents.llm.llm_openai.OpenAI")
-    def test_convert_message_for_openai_structured_content(self, mock_openai: Mock) -> None:
+    def test_convert_message_for_openai_structured_content(
+        self, mock_openai: Mock
+    ) -> None:
         """
         Test converting structured message for OpenAI.
         """

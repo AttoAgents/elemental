@@ -1,7 +1,7 @@
 .PHONY: doc
 
 test:
-	python -m pytest -v
+	python -m pytest -v --html=report.html --self-contained-html
 	
 coverage:
 	coverage run -m pytest -v; \
@@ -18,7 +18,7 @@ lint:
 	pylint --output-format=colorized elemental_agents/*
 
 doc:
-	pdoc --output-dir=./doc/html --footer-text="Elemental 0.1.0" elemental_agents
+	pdoc --output-dir=./doc/html --footer-text="Elemental 0.1.3" elemental_agents
 	
 mypy:
 	mypy elemental_agents/

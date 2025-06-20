@@ -77,7 +77,9 @@ class TestLLMFactory(unittest.TestCase):
 
     @patch("elemental_agents.llm.llm_ollama.OllamaLLM")
     @patch("elemental_agents.utils.config.ConfigModel")
-    def test_create_ollama_with_custom_model(self, mock_config: Mock, mock_ollama: Mock) -> None:
+    def test_create_ollama_with_custom_model(
+        self, mock_config: Mock, mock_ollama: Mock
+    ) -> None:
         """
         Test creating Ollama LLM with custom model.
         """
@@ -122,7 +124,9 @@ class TestLLMFactory(unittest.TestCase):
 
     @patch("elemental_agents.llm.llm_openai.OpenAILLM")
     @patch("elemental_agents.utils.config.ConfigModel")
-    def test_create_openai_with_custom_model(self, mock_config: Mock, mock_openai: Mock) -> None:
+    def test_create_openai_with_custom_model(
+        self, mock_config: Mock, mock_openai: Mock
+    ) -> None:
         """
         Test creating OpenAI LLM with custom model.
         """
@@ -144,7 +148,9 @@ class TestLLMFactory(unittest.TestCase):
 
     @patch("elemental_agents.llm.llm_anthropic.AnthropicLLM")
     @patch("elemental_agents.utils.config.ConfigModel")
-    def test_create_anthropic_engine(self, mock_config: Mock, mock_anthropic: Mock) -> None:
+    def test_create_anthropic_engine(
+        self, mock_config: Mock, mock_anthropic: Mock
+    ) -> None:
         """
         Test creating Anthropic LLM.
         """
@@ -191,7 +197,9 @@ class TestLLMFactory(unittest.TestCase):
 
     @patch("elemental_agents.llm.llm_azure_openai.AzureOpenAILLM")
     @patch("elemental_agents.utils.config.ConfigModel")
-    def test_create_azure_openai_engine(self, mock_config: Mock, mock_azure: Mock) -> None:
+    def test_create_azure_openai_engine(
+        self, mock_config: Mock, mock_azure: Mock
+    ) -> None:
         """
         Test creating Azure OpenAI LLM.
         """
@@ -215,7 +223,9 @@ class TestLLMFactory(unittest.TestCase):
 
     @patch("elemental_agents.llm.llm_bedrock_anthropic.BedrockAnthropicLLM")
     @patch("elemental_agents.utils.config.ConfigModel")
-    def test_create_bedrock_anthropic_engine(self, mock_config: Mock, mock_bedrock: Mock) -> None:
+    def test_create_bedrock_anthropic_engine(
+        self, mock_config: Mock, mock_bedrock: Mock
+    ) -> None:
         """
         Test creating Bedrock Anthropic LLM.
         """
@@ -254,7 +264,9 @@ class TestLLMFactory(unittest.TestCase):
 
     @patch("elemental_agents.llm.llm_openai.OpenAILLM")
     @patch("elemental_agents.utils.config.ConfigModel")
-    def test_create_with_custom_parameters(self, mock_config: Mock, mock_openai: Mock) -> None:
+    def test_create_with_custom_parameters(
+        self, mock_config: Mock, mock_openai: Mock
+    ) -> None:
         """
         Test creating LLM with custom parameters.
         """

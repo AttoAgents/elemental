@@ -21,3 +21,4 @@ dist/
 default-output.txt
 *.egg-info/
 *.egg
+report.html

@@ -4,8 +4,8 @@ Test cases for LLM streaming functionality.
 
 import asyncio
 import unittest
-from unittest.mock import AsyncMock, Mock, patch
 from typing import AsyncGenerator, Awaitable
+from unittest.mock import AsyncMock, Mock, patch
 
 from elemental_agents.llm.data_model import Message
 from elemental_agents.llm.llm_mock import MockLLM
@@ -149,7 +149,7 @@ class TestLLMStreaming(unittest.TestCase):
                 # Start connected, then lose connection
                 mock_sio.connected = True
 
-                async def mock_emit(*args: str, **kwargs: str)-> None:
+                async def mock_emit(*args: str, **kwargs: str) -> None:
                     """
                     Mock emit function to simulate connection loss.
                     """

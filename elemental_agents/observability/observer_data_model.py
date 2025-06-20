@@ -25,15 +25,15 @@ class ObserverSession(BaseModel):
     )
     session_id: str = Field(..., description="Unique identifier for the session.")
     first_message: str = Field(..., description="First message in the session.")
-    timestamp: str = datetime.now().isoformat()
+    timestamp: str = datetime.now(timezone.utc).isoformat()
     workflow_id: str = Field("", description="Unique identifier for the workflow.")
 
 
 class ObserverInteraction(BaseModel):
     """
-    ObserverInteractionRecord class to log the interactions.
+    ObserverInteraction class to log the interactions.
 
-    id: Unique identifier for the observer isntance.
+    id: Unique identifier for the observer instance.
     session_id: Unique identifier for the session.
     agent: Name of the agent.
     task: Description of the task.
@@ -47,14 +47,14 @@ class ObserverInteraction(BaseModel):
     session_id: str = Field(..., description="Unique identifier for the session.")
     role: str = Field(..., description="Role in the interaction.")
     message: str = Field(..., description="Content in the interaction.")
-    timestamp: str = datetime.now().isoformat()
+    timestamp: str = datetime.now(timezone.utc).isoformat()
 
 
 class ObserverTask(BaseModel):
     """
-    ObserverTaskRecord class to log the tasks and their changes.
+    ObserverTask class to log the tasks and their changes.
 
-    id: Unique identifier for the observer isntance.
+    id: Unique identifier for the observer instance.
     task_id: Unique identifier for the task.
     description: Description of the task.
     status: Status of the task.
@@ -86,9 +86,9 @@ class ObserverTask(BaseModel):
 
 class ObserverMessage(BaseModel):
     """
-    ObserverMessageRecord class to log the events.
+    ObserverMessage class to log the events.
 
-    id: Unique identifier for the observer isntance.
+    id: Unique identifier for the observer instance.
     role: Role in the Message format.
     text: Text in the Message format.
     agent: Agent name.
@@ -122,4 +122,26 @@ class ObserverWorkflow(BaseModel):
     )
     workflow_name: str = Field(..., description="Name of the workflow.")
     workflow_id: str = Field(..., description="Unique identifier for the workflow.")
-    timestamp: str = datetime.now().isoformat()
+    timestamp: str = datetime.now(timezone.utc).isoformat()
+
+
+class ObserverToolCall(BaseModel):
+    """
+    ObserverToolCall class to log the tool calls.
+
+    observer_id: Unique identifier for the observer instance.
+    session_id: Unique identifier for the session.
+    tool_name: Name of the tool called.
+    parameters: Parameters passed to the tool.
+    result: Result returned by the tool.
+    timestamp: Timestamp of the event.
+    """
+
+    observer_id: str = Field(
+        ..., description="Unique identifier for the observer instance."
+    )
+    session_id: str = Field(..., description="Unique identifier for the session.")
+    tool_name: str = Field(..., description="Name of the tool called.")
+    parameters: Dict[str, Any] = Field({}, description="Parameters passed to the tool.")
+    result: Any = Field(None, description="Result returned by the tool.")
+    timestamp: str = datetime.now(timezone.utc).isoformat()

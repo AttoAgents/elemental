@@ -132,7 +132,9 @@ class TestLLMMultimodal(unittest.TestCase):
         )
 
     @patch("elemental_agents.llm.llm_openai.OpenAI")
-    def test_openai_llm_multimodal_file_path_conversion(self, mock_openai: Mock) -> None:
+    def test_openai_llm_multimodal_file_path_conversion(
+        self, mock_openai: Mock
+    ) -> None:
         """
         Test OpenAI LLM converting file path to base64.
         """

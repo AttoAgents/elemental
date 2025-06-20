@@ -4,7 +4,7 @@ purposes. Observer information logged to the database or file may also be used
 to recover the state of the workflow in case of failure.
 """
 
-from typing import Literal, Tuple
+from typing import Any, Dict, Literal, Tuple
 
 from loguru import logger
 from rich.console import Console
@@ -16,6 +16,7 @@ from elemental_agents.observability.observer_data_model import (
     ObserverMessage,
     ObserverSession,
     ObserverTask,
+    ObserverToolCall,
 )
 from elemental_agents.observability.observer_database import ObserverDatabase
 from elemental_agents.observability.observer_webhook import send_to_webhook
@@ -227,6 +228,46 @@ class AgentObserver:
 
         if self._dest == "webhook":
             send_to_webhook(self._webhook_url, "task", record)
+
+        if self._dest == "none":
+            pass
+
+    def log_tool_call(
+        self,
+        input_session: str,
+        tool_name: str,
+        parameters: Dict[str, Any],
+        tool_result: str,
+    ) -> None:
+        """
+        Log the tool call to the destination.
+
+        :param input_session: Input session for the tool call.
+        :param tool_name: Name of the tool called.
+        :param parameters: Parameters used in the tool call.
+        :param tool_result: Result of the tool call.
+        """
+
+        record = ObserverToolCall(
+            observer_id=self._id,
+            session_id=input_session,
+            tool_name=tool_name,
+            parameters=parameters,
+            result=tool_result,
+        )
+
+        if self._dest == "screen":
+            self._console.print(record)
+
+        if self._dest == "file":
+            with open(self._file_name, "a", encoding="utf-8") as file:
+                file.write(str(record) + "\n")
+
+        if self._dest == "db":
+            self._db.add_tool_call(record)
+
+        if self._dest == "webhook":
+            send_to_webhook(self._webhook_url, "tool_call", record)
 
         if self._dest == "none":
             pass

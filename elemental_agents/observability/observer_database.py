@@ -240,6 +240,38 @@ class ObserverWorkflowRecord(Base):  # type: ignore
     )
 
 
+class ObserverToolCallRecord(Base):  # type: ignore
+    """
+    ObserverToolCallRecord schema
+    """
+
+    __tablename__ = "observer_tool_call_record"
+
+    id = Column(
+        String(36),  # 36 characters for a UUID string
+        primary_key=True,
+        default=lambda: str(uuid.uuid4()),  # Generate UUID as string
+        nullable=False,
+        unique=True,
+        comment="Unique identifier for the tool call record.",
+    )
+    observer_id = Column(
+        String, nullable=False, comment="Unique identifier for the observer instance."
+    )
+    session_id = Column(
+        String, nullable=False, comment="Unique identifier for the session."
+    )
+    tool_name = Column(String, nullable=False, comment="Name of the tool called.")
+    parameters = Column(JSON, nullable=False, comment="Parameters passed to the tool.")
+    result = Column(JSON, nullable=True, comment="Result returned by the tool.")
+    timestamp = Column(
+        DateTime,
+        default=datetime.now,
+        nullable=False,
+        comment="Timestamp of the event.",
+    )
+
+
 # ObserverDatabase class to handle database operations
 class ObserverDatabase:
     """
@@ -601,16 +633,18 @@ class ObserverDatabase:
                 )
                 session.add(new_workflow)
 
+    def add_tool_call(self, tool_call_data: ObserverToolCallRecord) -> None:
+        """
+        Adds a new tool call to the ObserverToolCallRecord table.
 
-# Example usage:
-# db = ObserverDatabase('sqlite:///observer.db')
-# db.create_tables()
-# db.add_task({
-#     'id': 'observer_001',
-#     'task_id': 'task_001',
-#     'description': 'This is a sample task',
-#     'status': Status.IN_PROGRESS,
-#     'result': 'Task started',
-#     'dependencies': ['task_000'],
-#     'context': {'task_000': 'completed'}
-# })
+        :param tool_call_data: An ObserverToolCallRecord pydantic model containing tool call details.
+        """
+        with self.session_scope() as session:
+            new_tool_call = ObserverToolCallRecord(
+                observer_id=tool_call_data.observer_id,
+                session_id=tool_call_data.session_id,
+                tool_name=tool_call_data.tool_name,
+                parameters=tool_call_data.parameters,
+                result=tool_call_data.result,
+            )
+            session.add(new_tool_call)
