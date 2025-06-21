@@ -173,7 +173,7 @@ class AgentObserver:
             observer_id=self._id,
             session_id=input_session,
             role=message.role,
-            text=message.content,
+            text=str(message.content),
             agent=agent_name,
             task=task_description,
         )

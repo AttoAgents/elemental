@@ -132,6 +132,9 @@ class ConfigModel(BaseSettings):
     # MCP
     mcpServers: str = ""
 
+    # Context
+    max_file_size: int = 1024 * 1024  # 1 MB
+
     @classmethod
     def update_parameter(cls, key: str, value: Any) -> None:
         """

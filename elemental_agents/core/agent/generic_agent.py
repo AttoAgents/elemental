@@ -275,7 +275,8 @@ class GenericAgent(Agent):
             logger.error("No action found in the agent's response.")
             observation = (
                 "No action found in the agent's response. "
-                f"Specify <action> or repeat response in {self._termination_sequence} XML tags to give final result."
+                f"Specify <action> or repeat response in {self._termination_sequence} XML "
+                "tags to give final result."
             )
 
         return observation

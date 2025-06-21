@@ -88,6 +88,8 @@ disable = [
     "too-many-locals",
     "too-many-branches",
     "import-outside-toplevel",
+    "no-member",
+    "broad-exception-caught",
 ]
 
 [tool.coverage.report]

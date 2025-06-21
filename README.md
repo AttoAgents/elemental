@@ -23,6 +23,7 @@ Elemental is a general-purpose, multi-agent framework for automating tasks using
 - Reasoning and conversational agent prompt strategies.
 - MCP Tools with complete toolset or individual tool level selection.
 - Context Manager for bringing files into the message.
+- Observability of agent events.
 
 ## Getting started 
 
