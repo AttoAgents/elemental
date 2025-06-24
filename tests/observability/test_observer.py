@@ -49,7 +49,10 @@ class TestObserver(unittest.TestCase):
         task_description = "test_task"
 
         observer.log_message(
-            message=msg, agent_name=agent_name, task_description=task_description
+            input_session="TestSession",
+            message=msg,
+            agent_name=agent_name,
+            task_description=task_description,
         )
 
         destination_type, _ = observer.get_destination()

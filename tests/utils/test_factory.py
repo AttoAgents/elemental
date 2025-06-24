@@ -4,7 +4,7 @@ Test generic factory function.
 
 import unittest
 
-from elemental_agents.utils.config import ConfigModel
+from elemental_agents.embeddings.embeddings_ollama import OllamaEmbeddings
 from elemental_agents.utils.factory import factory
 
 
@@ -18,12 +18,11 @@ class TestFactory(unittest.TestCase):
         Test factory method.
         """
 
-        config = ConfigModel()
-        model_name = config.llama_cpp_embedding_model_name
-        vector_size = config.llama_cpp_vector_size
+        model_name = "nomic-embed-text"
+        vector_size = 768
 
         instance = factory(
-            full_class_string="atomic.embeddings.embeddings_llama_cpp.LlamaCppEmbeddings",
+            full_class_string="elemental_agents.embeddings.embeddings_ollama.OllamaEmbeddings",
             model_name=model_name,
         )
         embed = instance.run("The sky is blue")
@@ -31,6 +30,7 @@ class TestFactory(unittest.TestCase):
         self.assertTrue(instance is not None)
         self.assertTrue(embed is not None)
         self.assertTrue(len(embed.embedding) == vector_size)
+        self.assertIsInstance(instance, OllamaEmbeddings)
 
 
 if __name__ == "__main__":

@@ -4,6 +4,8 @@ Factory for creating agent logic instances.
 
 from typing import Optional
 
+from loguru import logger
+
 from elemental_agents.core.agent_logic.agent_model import AgentContext
 from elemental_agents.core.agent_logic.generic_agent import AgentLogic
 from elemental_agents.core.toolbox.toolbox import ToolBox
@@ -34,11 +36,25 @@ class AgentLogicFactory:
         :return: An instance of the specified agent logic.
         """
 
+        supported_agent_logic_types = [
+            "simple",
+            "planner",
+            "planverifier",
+            "replanner",
+            "composer",
+            "verifier",
+            "react",
+            "planreact",
+            "convplanreact",
+        ]
+
         agent_logic: (
             SimpleAgentLogic
             | ComposerAgentLogic
             | VerifierAgentLogic
             | PlannerAgentLogic
+            | PlanVerifierAgentLogic
+            | ReplannerAgentLogic
             | ReActAgentLogic
             | PlanReActAgentLogic
             | ConvPlanReActAgentLogic
@@ -81,6 +97,24 @@ class AgentLogicFactory:
                     model=llm, context=context, template=template
                 )
                 return agent_logic
+            case "planverifier":
+                from elemental_agents.core.agent_logic.plan_verifier_agent import (
+                    PlanVerifierAgentLogic,
+                )
+
+                agent_logic = PlanVerifierAgentLogic(
+                    model=llm, context=context, template=template
+                )
+                return agent_logic
+            case "replanner":
+                from elemental_agents.core.agent_logic.replanner_agent import (
+                    ReplannerAgentLogic,
+                )
+
+                agent_logic = ReplannerAgentLogic(
+                    model=llm, context=context, template=template
+                )
+                return agent_logic
             case "react":
                 from elemental_agents.core.agent_logic.react_agent import (
                     ReActAgentLogic,
@@ -109,4 +143,11 @@ class AgentLogicFactory:
                 )
                 return agent_logic
             case _:
-                raise ValueError(f"Unknown agent logic type: {logic_type}")
+                logger.error(
+                    f"Unknown agent logic type: {logic_type}. "
+                    f"Supported agent logic types are: {supported_agent_logic_types}."
+                )
+                raise ValueError(
+                    f"Unknown agent logic type: {logic_type}. "
+                    f"Supported agent logic types are: {supported_agent_logic_types}."
+                )

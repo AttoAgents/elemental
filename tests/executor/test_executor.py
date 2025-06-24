@@ -82,7 +82,7 @@ class TestAgentExecution(unittest.TestCase):
         """
 
         llm_factory = LLMFactory()
-        llm = llm_factory.create()
+        llm = llm_factory.create("openai|gpt-4.1-mini")
 
         context = AgentContext(
             agent_name="PlannerAgent",

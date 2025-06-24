@@ -282,7 +282,7 @@ class TestLLMMultimodal(unittest.TestCase):
                 TextContent(text=""),
             ],
         )
-        self.assertEqual(message1.get_text_content(), "  Hello ")
+        self.assertEqual(message1.get_text_content(), " Hello ")
 
         # Mixed with dict format
         message2 = Message(

@@ -42,7 +42,9 @@ class TestPromptTemplate(unittest.TestCase):
         }
 
         final_prompt = "This is a test template for ResearchAgent. Researcher always following scientific method."
-        template_string = "This is a test template for {agent_name}. {agent_persona}."
+        template_string = (
+            "This is a test template for {{agent_name}}. {{agent_persona}}."
+        )
 
         string_template = StringTemplate(context, template_string)
 

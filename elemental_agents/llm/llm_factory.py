@@ -186,6 +186,16 @@ class LLMFactory:
             )
             return bedrock_anthropic_llm
 
+        if local_engine_name == "mock":
+
+            from elemental_agents.llm.llm_mock import MockLLM
+
+            logger.debug("Creating Mock LLM instance.")
+            mock_llm = MockLLM(
+                parameters=model_parameters,
+            )
+            return mock_llm
+
         logger.error(f"Unknown model name: {engine_name}")
         raise ValueError(f"Unknown model name: {engine_name}")
 

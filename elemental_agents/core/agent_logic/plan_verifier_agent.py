@@ -23,7 +23,7 @@ class PlanVerifierAgentLogic(GenericAgentLogic):
         self,
         model: LLM,
         context: AgentContext,
-        default_template_name: str = "Composer.template",
+        default_template_name: str = "PlanVerifier.template",
         template: Optional[str] = None,
     ) -> None:
         """
