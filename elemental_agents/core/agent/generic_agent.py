@@ -68,7 +68,9 @@ class GenericAgent(Agent):
 
         return processed
 
-    def run(self, task: str | List[str], input_session: str) -> str:
+    def run(
+        self, task: str | Message | List[str] | List[Message], input_session: str
+    ) -> str:
         """
         Run the generic agent.
 
@@ -90,8 +92,13 @@ class GenericAgent(Agent):
             mgs_type = ["user", "assistant"]
             idx = 0
             for item in task[:-1]:
-                msg = Message(role=mgs_type[idx % 2], content=item)
-                self._short_memory.add(msg)
+                # If the item is a string, convert it to a Message object
+                if isinstance(item, str):
+                    msg = Message(role=mgs_type[idx % 2], content=item)
+                    self._short_memory.add(msg)
+                else:
+                    # If the item is already a Message object, add it directly
+                    self._short_memory.add(item)
                 idx += 1
         else:
             instruction = task
@@ -111,7 +118,7 @@ class GenericAgent(Agent):
 
             # Run the instruction
             (terminate, result) = self.run_instruction(
-                instruction, original_instruction, input_session
+                instruction, str(original_instruction), input_session
             )
 
             # Check if the agent has completed the task
@@ -138,7 +145,10 @@ class GenericAgent(Agent):
         return action
 
     def run_instruction(
-        self, instruction: str, original_instruction: str = "", input_session: str = ""
+        self,
+        instruction: str | Message,
+        original_instruction: str = "",
+        input_session: str = "",
     ) -> Tuple[bool, str]:
         """
         Run the generic agent single iteration.
@@ -197,7 +207,10 @@ class GenericAgent(Agent):
             return (False, final_result)
 
     def run_instruction_inference(
-        self, instruction: str, original_instruction: str = "", input_session: str = ""
+        self,
+        instruction: str | Message,
+        original_instruction: str = "",
+        input_session: str = "",
     ) -> str:
         """
         Run the generic agent single iteration for inference.
@@ -210,7 +223,12 @@ class GenericAgent(Agent):
 
         agent_name = self._agent_logic.get_name()
 
-        new_user_message = Message(role="user", content=instruction)
+        new_user_message: Message | None = None
+        if isinstance(instruction, Message):
+            new_user_message = instruction
+        else:
+            new_user_message = Message(role="user", content=instruction)
+
         observer.log_message(
             input_session=input_session,
             message=new_user_message,

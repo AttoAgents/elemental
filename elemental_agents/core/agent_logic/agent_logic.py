@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 from elemental_agents.core.agent_logic.agent_model import AgentContext
 from elemental_agents.core.memory.short_memory import ShortMemory
 from elemental_agents.core.prompt_strategy.prompt import PromptStrategy
+from elemental_agents.llm.data_model import Message
 from elemental_agents.llm.llm import LLM
 
 
@@ -51,7 +52,7 @@ class AgentLogic(ABC):
         return self._persona
 
     @abstractmethod
-    def run(self, instruction: str, short_memory: ShortMemory) -> str:
+    def run(self, instruction: str | Message, short_memory: ShortMemory) -> str:
         """
         Run the agent. This is the main method that should be used to run the
         agent.

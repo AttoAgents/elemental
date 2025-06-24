@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
 from loguru import logger
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, field_validator
 
 
 class ContextConfig(BaseModel):
@@ -160,9 +160,9 @@ class LLMContextManager(BaseModel):
 
     config: ContextConfig = Field(default_factory=ContextConfig)
 
-    # Context tracking and caching
-    _context_cache: Dict[str, str] = Field(default_factory=dict, exclude=True)
-    _context_hash_cache: Dict[str, str] = Field(default_factory=dict, exclude=True)
+    # Context tracking and caching - Using PrivateAttr for private fields
+    _context_cache: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _context_hash_cache: Dict[str, str] = PrivateAttr(default_factory=dict)
 
     # Auto-context configuration
     auto_context_directories: List[Path] = Field(default_factory=list)

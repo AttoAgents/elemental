@@ -8,10 +8,7 @@ from loguru import logger
 
 from elemental_agents.core.agent_logic.agent_model import AgentContext
 from elemental_agents.core.agent_logic.generic_agent import GenericAgentLogic
-from elemental_agents.core.prompt_strategy.prompt_template import (
-    FileTemplate,
-    StringTemplate,
-)
+from elemental_agents.core.prompt_strategy.template_factory import TemplateFactory
 from elemental_agents.core.prompt_strategy.react_prompt import ReactPrompt
 from elemental_agents.core.toolbox.toolbox import ToolBox
 from elemental_agents.llm.llm import LLM
@@ -27,6 +24,7 @@ class ReActAgentLogic(GenericAgentLogic):
         model: LLM,
         context: AgentContext,
         toolbox: ToolBox,
+        default_template_name: str = "ReAct.template",
         template: Optional[str] = None,
     ) -> None:
         """
@@ -36,18 +34,17 @@ class ReActAgentLogic(GenericAgentLogic):
         :param model: The LLM object to use for the agent.
         :param context: The context (name, persona) for the agent.
         :param toolbox: The toolbox object to use for the agent.
+        :param default_template_name: The default template file name to use if
+            no template is provided.
         :param template: The template file to use for the agent.
         """
 
         self._context = context.model_dump()
         self._toolbox = toolbox
 
-        self._template: StringTemplate | FileTemplate
-
-        if template:
-            self._template = StringTemplate(self._context, template)
-        else:
-            self._template = FileTemplate(self._context, "ReAct.template")
+        self._template = TemplateFactory.create_template(
+            context=context, template=template, default_template_name=default_template_name
+        )
 
         self._strategy = ReactPrompt(
             system_template=self._template, tool_dictionary=self._toolbox.describe()

@@ -9,10 +9,8 @@ from loguru import logger
 from elemental_agents.core.agent_logic.agent_model import AgentContext
 from elemental_agents.core.agent_logic.generic_agent import GenericAgentLogic
 from elemental_agents.core.prompt_strategy.basic_prompt import BasicPrompt
-from elemental_agents.core.prompt_strategy.prompt_template import (
-    FileTemplate,
-    StringTemplate,
-)
+
+from elemental_agents.core.prompt_strategy.template_factory import TemplateFactory
 from elemental_agents.llm.llm import LLM
 from elemental_agents.utils.utils import extract_tag_content
 
@@ -23,30 +21,31 @@ class VerifierAgentLogic(GenericAgentLogic):
     """
 
     def __init__(
-        self, model: LLM, context: AgentContext, template: Optional[str] = None
+        self,
+        model: LLM,
+        context: AgentContext,
+        default_template_name: str = "Verifier.template",
+        template: Optional[str] = None
     ) -> None:
         """
         Initialize the Verifier Agent object.
 
         :param model: The LLM object to use for the agent.
         :param context: The context (name, persona) for the agent.
+        :param default_template_name: The default template file name to use if
+            no template is provided.
         :param template: The template string to use for the agent.
         """
 
-        self._context = context.model_dump()
-        self._template: StringTemplate | FileTemplate
-
-        if template:
-            self._template = StringTemplate(self._context, template)
-        else:
-            self._template = FileTemplate(self._context, "Verifier.template")
-
+        self._template = TemplateFactory.create_template(
+            context=context, template=template, default_template_name=default_template_name
+        )
         self._strategy = BasicPrompt(system_template=self._template)
 
         super().__init__(
             context=context, model=model, prompt_strategy=self._strategy, stop_word=None
         )
-        logger.debug(f"VerifierAgent initialized with context: {self._context}")
+        logger.debug(f"VerifierAgent initialized with context: {context}")
 
     def process_response(self, response: str) -> str:
         """
