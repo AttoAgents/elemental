@@ -9,7 +9,6 @@ from loguru import logger
 from elemental_agents.core.agent_logic.agent_model import AgentContext
 from elemental_agents.core.agent_logic.generic_agent import GenericAgentLogic
 from elemental_agents.core.prompt_strategy.basic_prompt import BasicPrompt
-
 from elemental_agents.core.prompt_strategy.template_factory import TemplateFactory
 from elemental_agents.llm.llm import LLM
 from elemental_agents.utils.utils import extract_tag_content
@@ -21,9 +20,11 @@ class PlannerAgentLogic(GenericAgentLogic):
     """
 
     def __init__(
-        self, model: LLM, context: AgentContext,
+        self,
+        model: LLM,
+        context: AgentContext,
         default_template_name: str = "Planner.template",
-        template: Optional[str] = None
+        template: Optional[str] = None,
     ) -> None:
         """
         Initialize the Planner Agent object.
@@ -36,7 +37,9 @@ class PlannerAgentLogic(GenericAgentLogic):
         """
 
         self._template = TemplateFactory.create_template(
-            context=context, template=template, default_template_name=default_template_name
+            context=context,
+            template=template,
+            default_template_name=default_template_name,
         )
         self._strategy = BasicPrompt(system_template=self._template)
 

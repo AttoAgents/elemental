@@ -45,7 +45,9 @@ class ConvPlanReActAgentLogic(GenericAgentLogic):
         self._toolbox = toolbox
 
         self._template = TemplateFactory.create_template(
-            context=context, template=template, default_template_name=default_template_name
+            context=context,
+            template=template,
+            default_template_name=default_template_name,
         )
 
         # Reuse ReAct prompt strategy type for ConvPlanReAct agent with different
