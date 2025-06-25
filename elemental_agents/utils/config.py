@@ -38,6 +38,7 @@ class ConfigModel(BaseSettings):
     ollama_streaming: bool = False
     ollama_url: str = "http://localhost:11434"
 
+    # OpenAI configuration
     openai_api_key: str = "Not set"
     openai_llm_model_name: str = ""
     openai_embedding_model_name: str = ""
@@ -48,6 +49,7 @@ class ConfigModel(BaseSettings):
     openai_streaming: bool = False
     openai_url: str = "https://api.openai.com/v1"
 
+    # Custom OpenAI Compatible LLM API configuration
     custom_api_key: str = "Not set"
     custom_llm_model_name: str = ""
     custom_embedding_model_name: str = ""
@@ -58,6 +60,7 @@ class ConfigModel(BaseSettings):
     custom_streaming: bool = False
     custom_url: str = ""
 
+    # Anthropic configuration
     anthropic_api_key: str = "Not set"
     anthropic_llm_model_name: str = ""
     anthropic_temperature: float = 0.0
@@ -65,6 +68,7 @@ class ConfigModel(BaseSettings):
     anthropic_stop_words: List[str] = []
     anthropic_streaming: bool = False
 
+    # Llama.cpp configuration
     llama_llm_model_name: str = ""
     llama_cpp_embedding_model_name: str = ""
     llama_cpp_vector_size: int = 0
@@ -75,19 +79,27 @@ class ConfigModel(BaseSettings):
     llama_cpp_model_directory: str = "models"
 
     # Azure OpenAI configuration
-    azure_openai_api_key: str = ""
+    azure_openai_api_key: str = "Not set"
     azure_openai_endpoint: str = ""
     azure_openai_deployment_name: str = ""
     azure_openai_api_version: str = "2024-02-15-preview"
     azure_openai_streaming: bool = False
 
     # AWS Bedrock configuration
-    aws_access_key_id: str = ""
-    aws_secret_access_key: str = ""
-    aws_session_token: str = ""
+    aws_access_key_id: str = "Not set"
+    aws_secret_access_key: str = "Not set"
+    aws_session_token: str = "Not set"
     aws_region: str = "us-east-1"
     bedrock_anthropic_model_id: str = "anthropic.claude-3-sonnet-20240229-v1:0"
     bedrock_anthropic_streaming: bool = False
+
+    # Google Gemini
+    gemini_api_key: str = "Not set"
+    gemini_llm_model_name: str = "gemini-2.5-flash"
+    gemini_streaming: bool = False
+    gemini_temperature: float = 0.0
+    gemini_max_tokens: int = 0
+    gemini_stop_words: List[str] = []
 
     default_engine: str = ""
     default_model_name: str = ""
@@ -131,6 +143,9 @@ class ConfigModel(BaseSettings):
 
     # MCP
     mcpServers: str = ""
+
+
+
 
     # Context
     max_file_size: int = 1024 * 1024  # 1 MB

@@ -186,6 +186,29 @@ class LLMFactory:
             )
             return bedrock_anthropic_llm
 
+        if local_engine_name == "google":
+
+            from elemental_agents.llm.llm_gemini import GeminiLLM
+
+            local_model_name = (
+                llm_parameters[1]
+                if len(llm_parameters) > 1
+                else self._config.gemini_llm_model_name
+            )
+
+            logger.debug("Creating Gemini LLM instance.")
+            logger.debug(f"Model name: {local_model_name}")
+
+            gemini_llm = GeminiLLM(
+                model_name=local_model_name,
+                message_stream=self._config.gemini_streaming,
+                stream_url=self._config.websocket_url,
+                parameters=model_parameters,
+                gemini_api_key=self._config.gemini_api_key
+            )
+            return gemini_llm
+
+
         if local_engine_name == "mock":
 
             from elemental_agents.llm.llm_mock import MockLLM
