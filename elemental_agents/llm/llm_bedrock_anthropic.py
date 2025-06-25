@@ -31,6 +31,7 @@ class BedrockAnthropicLLM(LLM):
         aws_session_token: str = None,
         region_name: str = "us-east-1",
         max_retries: int = 3,
+        anthropic_version: str = "bedrock-2023-05-31",
     ) -> None:
         """
         Initialize the BedrockAnthropicLLM object with the given parameters.
@@ -59,6 +60,7 @@ class BedrockAnthropicLLM(LLM):
 
         self._client = session.client("bedrock-runtime")
         self._region_name = region_name
+        self._anthropic_version = anthropic_version
 
     def _extract_system_message(self, messages: List[Dict]) -> tuple:
         """
@@ -172,6 +174,7 @@ class BedrockAnthropicLLM(LLM):
             "messages": bedrock_messages,
             "temperature": self._temperature,
             "top_p": self._top_p,
+            "anthropic_version": self._anthropic_version,
         }
 
         if stop_list:
@@ -233,6 +236,7 @@ class BedrockAnthropicLLM(LLM):
             "messages": bedrock_messages,
             "temperature": self._temperature,
             "top_p": self._top_p,
+            "anthropic_version": self._anthropic_version,
         }
 
         if stop_list:
