@@ -80,8 +80,7 @@ from elemental_agents.core.agent.agent_factory import AgentFactory
 TASK = "Why is the sky blue?"
 SESSION = "TestSession"
 
-factory = AgentFactory()
-assistant = factory.create(
+assistant = AgentFactory.create(
     agent_name="AssistantAgent",
     agent_persona="Simple always helpful assistant",
     agent_type="simple",
@@ -106,8 +105,7 @@ from elemental_agents.core.agent.agent_factory import AgentFactory
 TASK = "Calculate the sum of 5 and 3."
 SESSION = "Test Session"
 
-factory = AgentFactory()
-assistant = factory.create(
+assistant = AgentFactory.create(
     agent_name="AssistantAgent",
     agent_persona="You are a helpful assistant.",
     agent_type="ReAct",
@@ -135,8 +133,7 @@ from elemental_agents.core.agent.agent_factory import AgentFactory
 TASK = "Calculate the sum of 5 and 3."
 SESSION = "Test Session"
 
-factory = AgentFactory()
-assistant = factory.create(
+assistant = AgentFactory.create(
     agent_name="AssistantAgent",
     agent_persona="You are a helpful assistant.",
     agent_type="PlanReAct",
@@ -158,15 +155,14 @@ from elemental_agents.core.agent.agent_factory import AgentFactory
 from elemental_agents.core.agent_team.generic_agent_team import GenericAgentTeam
 from elemental_agents.core.selector.agent_selector_factory import AgentSelectorFactory
 
-factory = AgentFactory()
-agent1 = factory.create(
+agent1 = AgentFactory.create(
     agent_name="AssistantAgent",
     agent_persona="You are a helpful assistant.",
     agent_type="ConvPlanReAct",
     llm_model="openai|gpt-4.1-mini",
     tools=["Calculator", "CurrentTime", "NoAction"],
 )
-agent2 = factory.create(
+agent2 = AgentFactory.create(
     agent_name="ProgrammerAgent",
     agent_persona="You are a helpful programmer.",
     agent_type="ConvPlanReAct",
@@ -205,15 +201,13 @@ from elemental_agents.core.orchestration.dynamic_agent_orchestrator import (
     DynamicAgentOrchestrator,
 )
 
-factory = AgentFactory()
-
-planner_agent = factory.create(
+planner_agent = AgentFactory.create(
     agent_name="PlannerAgent",
     agent_persona="",
     agent_type="planner",
     llm_model="openai|gpt-4.1-mini",
 )
-executor_agent = factory.create(
+executor_agent = AgentFactory.create(
     agent_name="ExecutorAgent",
     agent_persona="You are an expert software engineer.",
     agent_type="ReAct",
@@ -300,8 +294,7 @@ from elemental_agents.core.agent.agent_factory import AgentFactory
 TASK = "Search Github repositories for REST API creation in Python."
 SESSION = "Test Session"
 
-factory = AgentFactory()
-assistant = factory.create(
+assistant = AgentFactory.create(
     agent_name="AssistantAgent",
     agent_persona="You are a helpful assistant.",
     agent_type="ReAct",

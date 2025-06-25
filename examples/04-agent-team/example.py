@@ -8,16 +8,15 @@ from elemental_agents.core.agent.agent_factory import AgentFactory
 from elemental_agents.core.agent_team.generic_agent_team import GenericAgentTeam
 from elemental_agents.core.selector.agent_selector_factory import AgentSelectorFactory
 
-factory = AgentFactory()
 
-agent1 = factory.create(
+agent1 = AgentFactory.create(
     agent_name="AssistantAgent",
     agent_persona="You are a helpful assistant.",
     agent_type="ConvPlanReAct",
     llm_model="openai|gpt-4.1-mini",
     tools=["Calculator", "CurrentTime", "NoAction"],
 )
-agent2 = factory.create(
+agent2 = AgentFactory.create(
     agent_name="ProgrammerAgent",
     agent_persona="You are a helpful programmer.",
     agent_type="ConvPlanReAct",

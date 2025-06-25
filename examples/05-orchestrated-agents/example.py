@@ -9,15 +9,14 @@ from elemental_agents.core.orchestration.dynamic_agent_orchestrator import (
     DynamicAgentOrchestrator,
 )
 
-factory = AgentFactory()
 
-planner_agent = factory.create(
+planner_agent = AgentFactory.create(
     agent_name="PlannerAgent",
     agent_persona="",
     agent_type="planner",
     llm_model="openai|gpt-4.1-mini",
 )
-executor_agent = factory.create(
+executor_agent = AgentFactory.create(
     agent_name="ExecutorAgent",
     agent_persona="You are an expert software engineer.",
     agent_type="ReAct",

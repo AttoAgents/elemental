@@ -7,8 +7,7 @@ from elemental_agents.core.agent.agent_factory import AgentFactory
 TASK = "Calculate the sum of 5 and 3."
 SESSION = "Test Session"
 
-factory = AgentFactory()
-assistant = factory.create(
+assistant = AgentFactory.create(
     agent_name="AssistantAgent",
     agent_persona="You are a helpful assistant.",
     agent_type="ReAct",

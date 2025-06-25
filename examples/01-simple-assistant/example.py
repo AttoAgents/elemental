@@ -10,8 +10,7 @@ from elemental_agents.core.agent.agent_factory import AgentFactory
 TASK = "Why is the sky blue?"
 SESSION = "TestSession"
 
-factory = AgentFactory()
-assistant = factory.create(
+assistant = AgentFactory.create(
     agent_name="AssistantAgent",
     agent_persona="Simple always helpful assistant",
     agent_type="simple",
