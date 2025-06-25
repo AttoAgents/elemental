@@ -183,6 +183,7 @@ class LLMFactory:
                 aws_secret_access_key=self._config.aws_secret_access_key,
                 aws_session_token=self._config.aws_session_token,
                 region_name=self._config.aws_region,
+                anthropic_version=self._config.aws_anthropic_version,
             )
             return bedrock_anthropic_llm
 

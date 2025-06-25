@@ -1,14 +1,17 @@
 """
-Example of using the Bedrock Anthropic LLM with Elemental.
+Example of using the Bedrock Anthropic LLM with Elemental. 
+Factory-based approach.
 """
 
 from loguru import logger
 
 from elemental_agents.llm.data_model import Message, ModelParameters
-from elemental_agents.llm.llm_bedrock_anthropic import BedrockAnthropicLLM
+
 from elemental_agents.utils.config import ConfigModel
+from elemental_agents.llm.llm_factory import LLMFactory
 
 config = ConfigModel()
+llm_factory = LLMFactory()
 
 parameters = ModelParameters(
     temperature=0.0,
@@ -19,16 +22,9 @@ parameters = ModelParameters(
     stop=["<PAUSE>", "<STOP>"],
 )
 
-llm = BedrockAnthropicLLM(
-    model_name="anthropic.claude-3-5-sonnet-20240620-v1:0",
-    message_stream=False,
-    stream_url=None,
-    parameters=parameters,
-    max_retries=3,
-    aws_access_key_id=config.aws_access_key_id,
-    aws_secret_access_key=config.aws_secret_access_key,
-    region_name=config.aws_region,
-    anthropic_version=config.aws_anthropic_version
+llm = llm_factory.create(
+    "bedrock_anthropic|anthropic.claude-3-5-sonnet-20240620-v1:0",
+    model_parameters=parameters
 )
 
 msgs = [Message(role="user", content="What is the capital of France?")]

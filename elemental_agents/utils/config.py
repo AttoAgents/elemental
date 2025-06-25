@@ -88,11 +88,11 @@ class ConfigModel(BaseSettings):
     # AWS Bedrock configuration
     aws_access_key_id: str = "Not set"
     aws_secret_access_key: str = "Not set"
-    aws_session_token: str = "Not set"
+    aws_session_token: str = ""
     aws_region: str = "us-east-1"
     bedrock_anthropic_model_id: str = "anthropic.claude-3-sonnet-20240229-v1:0"
     bedrock_anthropic_streaming: bool = False
-    anthropic_version: str = "bedrock-2023-05-31"
+    aws_anthropic_version: str = "bedrock-2023-05-31"
 
     # Google Gemini
     gemini_api_key: str = "Not set"
