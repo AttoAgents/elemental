@@ -17,11 +17,18 @@ def example_basic_usage() -> None:
     """
     Basic usage of the LLM Context Manager to gather context from a directory.
     """
-    manager = LLMContextManager()
+    config = ContextConfig(
+        include_extensions=[".py", ".md", ".txt"],
+        max_file_size=50 * 1024,  # 50KB
+        max_content_length=40000,
+        include_line_numbers=True,
+        truncate_content=False
+    )
+    manager = LLMContextManager(config=config)
 
     # Get context data
     context_data = manager.gather_context(
-        "./elemental_agents/llm", include_content=True
+        "./elemental_agents/llm/", include_content=True
     )
 
     # Format for LLM

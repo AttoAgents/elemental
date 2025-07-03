@@ -13,8 +13,8 @@ Elemental is a general-purpose, multi-agent framework for automating tasks using
 ## Features
 
 - Multi-agent task execution.
-- Custom language model per agent (including different inference engines and size of the model - direct support for Ollama, Llama.cpp, OpenAI and compatible APIs, Anthropic).
-- Multi-modal messages with OpenAI, Anthropic, and Ollama.
+- Custom language model per agent - including different inference engines and size of the model - direct support for Ollama, Llama.cpp, Gemini, OpenAI and compatible APIs, Anthropic (native and AWS Bedrock).
+- Multi-modal messages with OpenAI, Anthropic, Anthropic, Gemini, and Ollama.
 - Simple model selection per agent e.g. `ollama|gemma3` or `openai|gpt-4.1-mini`.
 - Customizable templates with variables in Jinja format.
 - Default dynamic orchestrator with dynamic planning, execution, re-planning, composition and verification steps.
