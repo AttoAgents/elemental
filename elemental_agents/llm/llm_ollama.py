@@ -49,7 +49,7 @@ class OllamaLLM(LLM):
         :param stop_list: List of stop sequences for the model.
         :return: Options object with the model parameters.
         """
-        options: Options = {}
+        options: Options = Options()
         options["temperature"] = self._temperature
         options["num_predict"] = self._max_tokens
         if stop_list:

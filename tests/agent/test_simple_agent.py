@@ -21,7 +21,7 @@ class TestSimpleAgent(unittest.TestCase):
         """
 
         llm_factory = LLMFactory()
-        llm = llm_factory.create()
+        llm = llm_factory.create("ollama|gemma3n:e4b")
 
         context = AgentContext(
             agent_name="AssistantAgent",

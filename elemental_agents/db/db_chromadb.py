@@ -5,7 +5,7 @@ ChromeDB database abstraction implementation in accordance with DB interface.
 from typing import List, Mapping, Sequence, Tuple
 
 from chromadb import Collection, EphemeralClient, PersistentClient
-from chromadb.api.types import IncludeEnum
+# from chromadb.api.types import IncludeEnum
 from loguru import logger
 
 from elemental_agents.db.vector_db import VectorDB
@@ -113,9 +113,9 @@ class DBChromaDB(VectorDB):
                 query_embeddings=[search_item],
                 n_results=top_n,
                 include=[
-                    IncludeEnum.distances,
-                    IncludeEnum.documents,
-                    IncludeEnum.embeddings,
+                    "distances",
+                    "documents",
+                    "embeddings",
                 ],
             )
             logger.debug(f"Query result data: {data}")
@@ -274,10 +274,10 @@ class DBChromaDB(VectorDB):
                 query_embeddings=[search_item],
                 n_results=top_n,
                 include=[
-                    IncludeEnum.distances,
-                    IncludeEnum.documents,
-                    IncludeEnum.embeddings,
-                    IncludeEnum.metadatas,
+                    "distances",
+                    "documents",
+                    "embeddings",
+                    "metadatas",
                 ],
             )
             logger.debug(f"Query result data: {data}")
