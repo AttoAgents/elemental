@@ -7,9 +7,7 @@ for the input text data.
 from loguru import logger
 
 from elemental_agents.embeddings.embeddings import Embeddings
-from elemental_agents.embeddings.embeddings_llama_cpp import LlamaCppEmbeddings
-from elemental_agents.embeddings.embeddings_ollama import OllamaEmbeddings
-from elemental_agents.embeddings.embeddings_openai import OpenAIEmbeddings
+
 from elemental_agents.utils.config import ConfigModel
 from elemental_agents.utils.exceptions import EmbeddingTypeError
 
@@ -49,6 +47,8 @@ class EmbeddingsFactory:
 
         if self._local_engine_name == "ollama":
 
+            from elemental_agents.embeddings.embeddings_ollama import OllamaEmbeddings
+
             local_model_name = (
                 embeddings_parameters[1]
                 if len(embeddings_parameters) > 1
@@ -62,6 +62,8 @@ class EmbeddingsFactory:
             return ollama_embeddings
 
         if self._local_engine_name == "openai":
+
+            from elemental_agents.embeddings.embeddings_openai import OpenAIEmbeddings
 
             local_model_name = (
                 embeddings_parameters[1]
@@ -79,6 +81,8 @@ class EmbeddingsFactory:
             return openai_embeddings
 
         if self._local_engine_name == "llama-cpp":
+
+            from elemental_agents.embeddings.embeddings_llama_cpp import LlamaCppEmbeddings
 
             local_model_name = (
                 embeddings_parameters[1]
