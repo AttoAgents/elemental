@@ -112,7 +112,11 @@ class WriteFile(Tool):
                 logger.warning(f"File {path} already exists and will be overwritten")
 
             # create the directory if it does not exist
-            os.makedirs(os.path.dirname(path), exist_ok=True)
+            dir_path = os.path.dirname(path)
+            if dir_path:  # Only create directory if path is not empty (i.e., file is not in current directory)
+                logger.info(f"Creating directory for path: {path}")
+                logger.info(f"Directory path: {dir_path}")
+                os.makedirs(dir_path, exist_ok=True)
 
             # Write the content to the file
             with open(path, "w", encoding="utf-8") as f:
@@ -145,7 +149,7 @@ if __name__ == "__main__":
     file_writer = WriteFile()
 
     # Define the input parameters for the WriteFiles tool
-    params = WriteFileParams(file_path="./output.txt", content=["Hello, world!\n"])
+    params = WriteFileParams(file_path="output.txt", content=["Hello, world!\n"])
 
     # Run the WriteFiles tool with the input parameters
     output = file_writer.run(params)
